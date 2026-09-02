@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+:root {
+  --nexgen-navy: #0A568C;
+  --orbit-green: #8CB23E;
+  --midnight-navy: #01173B;
+  --electric-cyan: #009CFF;
+  --pure-white: #FFFFFF;
+  --chalk-green: #1a3a2d;
+  --chalk-wood: #3d2b1f;
+  --chalk-wood-light: #5c3d2e;
+  --brand-font: "Montserrat", "Futura", "Futura PT", "Trebuchet MS", system-ui, -apple-system, sans-serif;
+}
+
+/* Primary Typeface: Montserrat / Futura Geometric Sans */
+html, body {
+  font-family: var(--brand-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scaleUp {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes slideLeft {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+
+  @keyframes ballDropBounce {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -280px) rotate(var(--ball-rot, 0deg)) scale(var(--ball-scale, 1));
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) rotate(var(--ball-rot, 0deg)) scale(var(--ball-scale, 1));
+    }
+  }
+
+  .animate-ballDrop {
+    animation: ballDropBounce 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.25s ease-out forwards;
+  }
+
+  .animate-scaleUp {
+    animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-slideLeft {
+    animation: slideLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes chalkScribble {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 1; }
+  }
+
+  .chalkboard-bg {
+    background-color: #0b2a1f;
+    background-image:
+      radial-gradient(ellipse at 20% 15%, rgba(255,255,255,0.07) 0%, transparent 45%),
+      radial-gradient(ellipse at 80% 85%, rgba(255,255,255,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(140,178,62,0.06) 0%, transparent 70%),
+      linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 80px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 80px);
+  }
+
+  .chalkboard-bg--navy {
+    background-color: #011026;
+    background-image:
+      radial-gradient(ellipse at 18% 12%, rgba(255,255,255,0.09) 0%, transparent 42%),
+      radial-gradient(ellipse at 78% 88%, rgba(0,156,255,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.05) 0%, transparent 65%),
+      linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 55%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 64px);
+  }
+
+  .chalk-text {
+    color: #fefefe;
+    font-family: var(--brand-font);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    text-shadow:
+      0 0 1px rgba(255,255,255,0.95),
+      0 0 6px rgba(255,255,255,0.18),
+      1px 1px 0 rgba(255,255,255,0.08);
+  }
+
+  /* Headlines & Tier Titles: Heavy/Bold, Uppercase, Tight Letter-Spacing */
+  .nexgen-headline {
+    font-family: var(--brand-font);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+  }
+  .nexgen-tier {
+    font-family: var(--brand-font);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .nexgen-label {
+    font-family: var(--brand-font);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  /* Card Shell: Pure White + 3px Midnight Navy stroke, 20–24px radius */
+  .brand-card {
+    background: #FFFFFF;
+    border: 3px solid #01173B;
+    border-radius: 22px;
+    box-shadow: 0 10px 28px rgba(1,23,59,0.14), 0 2px 8px rgba(1,23,59,0.08);
+  }
+  .brand-card--sm { border-radius: 20px; }
+  .brand-card--lg { border-radius: 24px; }
+
+  /* Header Badges: Overlapping top-left pill in Midnight Navy, white logo + cyan tier */
+  .brand-badge {
+    background: #01173B;
+    border: 2px solid #01173B;
+    border-radius: 9999px;
+    box-shadow: 0 4px 14px rgba(1,23,59,0.28);
+  }
+  .brand-badge__logo {
+    color: #FFFFFF;
+    font-family: var(--brand-font);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+  }
+  .brand-badge__tier {
+    color: #009CFF;
+    font-family: var(--brand-font);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  /* Iconography: flat geometric icons in Nexgen Navy */
+  .brand-icon {
+    color: #0A568C;
+    stroke-width: 2.2;
+  }
+  .brand-icon--fill {
+    fill: #0A568C;
+    color: #0A568C;
+  }
+
+  .chalk-underline {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85) 18%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.85) 82%, transparent);
+    height: 2px;
+    opacity: 0.95;
+    filter: blur(0.2px);
+  }
+
+  .wood-frame {
+    background: linear-gradient(180deg, #5c3d2e 0%, #3d2b1f 18%, #4a3326 40%, #3d2b1f 70%, #2c1e14 100%);
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,0.18),
+      inset 0 -2px 0 rgba(0,0,0,0.55),
+      0 10px 30px rgba(0,0,0,0.55),
+      0 2px 8px rgba(0,0,0,0.45);
+  }
+
+  .wood-frame::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .brand-swoosh {
+    background: linear-gradient(90deg, #8CB23E 0%, #a8d44a 35%, #8CB23E 70%, #6d8f2f 100%);
+    height: 4px;
+    border-radius: 9999px;
+    box-shadow: 0 1px 6px rgba(140,178,62,0.5);
+  }
+}
+
