@@ -158,24 +158,26 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
 
   return (
     <div className="fixed inset-0 z-[55] flex justify-end bg-[#01173B]/70 backdrop-blur-[2px] animate-fadeIn">
-      <div className="w-full max-w-md md:max-w-lg bg-white border-l-[3px] border-[#01173B] h-full shadow-[ -18px_0_50px_rgba(1,23,59,0.35)] flex flex-col animate-slideLeft relative overflow-hidden">
+      <div className="w-full max-w-md md:max-w-lg chalkboard-bg--navy bg-[#01173B] border-l-[4px] border-[#8CB23E] h-full shadow-[ -18px_0_50px_rgba(0,0,0,0.55)] flex flex-col animate-slideLeft relative overflow-hidden">
+        {/* subtle chalk dust */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.08]" style={{ background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%)' }} />
         {/* Header Badge — overlapping top-left pill */}
         <div className="absolute top-0 left-6 brand-badge px-4 py-1.5 flex items-center gap-2 z-10">
           <span className="brand-badge__logo text-[11px]">NEXGEN</span>
           <span className="w-px h-3 bg-white/20" />
           <span className="brand-badge__tier text-[11px]">EDIT POOL</span>
         </div>
-        <div className="absolute top-7 left-6 right-6 h-[3px] brand-swoosh opacity-60" />
+        <div className="absolute top-7 left-6 right-6 h-[3px] brand-swoosh opacity-70" />
         
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-10 pb-3.5 border-b-[3px] border-[#01173B] bg-white">
+        {/* Header — dark */}
+        <div className="relative flex items-center justify-between px-5 pt-10 pb-3.5 border-b-[3px] border-white/10 bg-transparent">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#0A568C] border-2 border-[#01173B] flex items-center justify-center text-white shadow brand-icon">
+            <div className="w-9 h-9 rounded-xl bg-[#0A568C] border-2 border-white/20 flex items-center justify-center text-white shadow">
               <GraduationCap className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h3 className="nexgen-headline text-[16px] text-[#01173B] leading-none">EDIT POOL</h3>
-              <p className="nexgen-label text-[11px] text-[#0A568C]">
+              <h3 className="nexgen-headline text-[16px] text-white leading-none">EDIT POOL</h3>
+              <p className="nexgen-label text-[11px] text-[#8CB23E]">
                 {items.length} {items.length === 1 ? 'ENTRY' : 'ENTRIES'} • IN DRUM
               </p>
             </div>
@@ -184,21 +186,21 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
           <button
             id="btn-close-pool"
             onClick={onClose}
-            className="p-2 rounded-full bg-[#01173B] text-white hover:bg-black border-2 border-[#01173B] shadow"
+            className="p-2 rounded-full bg-white text-[#01173B] hover:bg-[#f0f4f8] border-2 border-white shadow"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Quick Mystery Mode Toggle Banner */}
-        <div className="px-5 py-2.5 bg-[#f0f4f8] border-b-[3px] border-[#01173B]/10 flex items-center justify-between">
+        {/* Quick Mystery Mode Toggle Banner — dark */}
+        <div className="relative px-5 py-2.5 bg-white/[0.06] border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {hideNames ? (
-              <EyeOff className="w-4 h-4 text-[#0A568C] brand-icon" />
+              <EyeOff className="w-4 h-4 text-[#8CB23E]" />
             ) : (
-              <Eye className="w-4 h-4 text-[#0A568C] brand-icon" />
+              <Eye className="w-4 h-4 text-[#8CB23E]" />
             )}
-            <span className="nexgen-label text-[11px] text-[#01173B]">
+            <span className="nexgen-label text-[11px] text-white">
               {hideNames ? 'MYSTERY: HIDDEN ?' : 'VISIBLE: NAMES SHOWN'}
             </span>
           </div>
@@ -209,22 +211,22 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
             }}
             className={`px-3 py-1.5 rounded-full text-xs font-black transition-all border-2 ${
               hideNames
-                ? 'bg-[#01173B] text-white border-[#01173B] shadow'
-                : 'bg-white text-[#01173B] border-[#01173B]/15'
+                ? 'bg-[#8CB23E] text-[#01173B] border-[#8CB23E] shadow'
+                : 'bg-white text-[#01173B] border-white'
             }`}
           >
             {hideNames ? 'MYSTERY ON' : 'SHOW NAMES'}
           </button>
         </div>
 
-        {/* Cloud Sync / Saved Lists */}
-        <div className="px-5 py-3 bg-white border-b-[3px] border-[#01173B]/10">
+        {/* Cloud Sync / Saved Lists — dark card */}
+        <div className="relative px-5 py-3 bg-white/[0.06] border-b border-white/10 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-2">
-            <span className="nexgen-label text-[11px] text-[#0A568C] flex items-center gap-1.5">
-              <FolderPlus className="w-4 h-4 brand-icon" />
+            <span className="nexgen-label text-[11px] text-[#8CB23E] flex items-center gap-1.5">
+              <FolderPlus className="w-4 h-4 text-[#8CB23E]" />
               SAVED LISTS
             </span>
-            <span className={`nexgen-label text-[10px] ${isUnlocked ? 'text-[#8CB23E]' : 'text-[#01173B]/45'}`}>
+            <span className={`nexgen-label text-[10px] ${isUnlocked ? 'text-[#8CB23E]' : 'text-white/50'}`}>
               {!isCloudReady
                 ? 'SYNCING…'
                 : cloudError
@@ -243,12 +245,12 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
                 value={passcodeInput}
                 onChange={(e) => setPasscodeInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
-                className="flex-1 bg-[#f0f4f8] border-[3px] border-[#01173B] rounded-xl px-3 py-2 text-sm font-bold text-[#01173B] placeholder:text-[#01173B]/40 focus:outline-none focus:border-[#0A568C]"
+                className="flex-1 bg-white border-2 border-white rounded-xl px-3 py-2 text-sm font-bold text-[#01173B] placeholder:text-[#01173B]/50 focus:outline-none focus:border-[#8CB23E]"
               />
               <button
                 onClick={handleUnlock}
                 disabled={authBusy || !passcodeInput.trim()}
-                className="px-4 py-2 rounded-xl bg-[#0A568C] hover:bg-[#0d6ab0] disabled:opacity-40 text-white font-black text-xs flex items-center gap-1.5 shadow border-2 border-[#01173B] nexgen-label"
+                className="px-4 py-2 rounded-xl bg-[#8CB23E] hover:bg-[#9bc552] disabled:opacity-40 text-[#01173B] font-black text-xs flex items-center gap-1.5 shadow border-2 border-[#8CB23E] nexgen-label"
               >
                 <Lock className="w-3.5 h-3.5" />
                 UNLOCK
@@ -260,9 +262,9 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
               <span>Edits auto-save to cloud list “{currentList?.name ?? '…'}”</span>
             </div>
           )}
-          {authMsg && <p className="mt-2 text-[11px] font-bold text-[#0A568C]">{authMsg}</p>}
+          {authMsg && <p className="mt-2 text-[11px] font-bold text-[#8CB23E]">{authMsg}</p>}
 
-          {/* List switcher */}
+          {/* List switcher — dark cards */}
           {isCloudReady && !cloudError && lists.length > 0 && (
             <div className="mt-3 space-y-1.5">
               {lists.map((l) => {
@@ -270,23 +272,23 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
                 return (
                   <div
                     key={l._id}
-                    className={`flex items-center justify-between gap-2 rounded-xl border-[3px] px-3 py-2 transition-colors ${
-                      active ? 'bg-[#0A568C] text-white border-[#01173B]' : 'bg-white text-[#01173B] border-[#01173B]/20 hover:border-[#0A568C]'
+                    className={`flex items-center justify-between gap-2 rounded-xl border-2 px-3 py-2 transition-colors ${
+                      active ? 'bg-[#0A568C] text-white border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)]' : 'bg-white/10 text-white border-white/15 hover:bg-white/15 hover:border-white/25'
                     }`}
                   >
                     <button
                       onClick={() => { if (!active) onSelectList(l.listCode); }}
                       className="flex items-center gap-2 min-w-0 flex-1 text-left"
                     >
-                      <span className={`w-2 h-2 rounded-full shrink-0 ${active ? 'bg-[#8CB23E]' : 'bg-[#009CFF]'}`} />
+                      <span className={`w-2 h-2 rounded-full shrink-0 ${active ? 'bg-[#8CB23E]' : 'bg-[#8CB23E]'}`} />
                       <span className="text-xs font-black truncate nexgen-label">{l.name}</span>
-                      <span className={`text-[10px] font-bold ${active ? 'text-white/70' : 'text-[#01173B]/45'}`}>{l.count}</span>
+                      <span className={`text-[10px] font-bold ${active ? 'text-white/80' : 'text-white/60'}`}>{l.count}</span>
                     </button>
                     {active && (
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           onClick={() => { const n = prompt('Rename list', l.name); if (n) onRenameList(l._id, n); }}
-                          className={`p-1 rounded ${active ? 'text-white/80 hover:bg-white/20' : 'text-[#01173B]/60 hover:bg-[#f0f4f8]'}`}
+                          className="p-1 rounded text-white/80 hover:bg-white/20"
                           title="Rename"
                         >
                           <Pencil className="w-3.5 h-3.5" />
@@ -294,7 +296,7 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
                         {l.listCode !== 'RAFFLE' && (
                           <button
                             onClick={() => { if (confirm(`Delete list “${l.name}”?`)) onDeleteList(l._id); }}
-                            className={`p-1 rounded ${active ? 'text-white/80 hover:bg-white/20' : 'text-red-500/70 hover:bg-red-50'}`}
+                            className="p-1 rounded text-white/80 hover:bg-white/20"
                             title="Delete"
                           >
                             <TrashIcon className="w-3.5 h-3.5" />
@@ -308,7 +310,7 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
             </div>
           )}
 
-          {/* Create new list */}
+          {/* Create new list — dark */}
           {isCloudReady && !cloudError && (
             <div className="mt-2 flex gap-2">
               <input
@@ -317,22 +319,22 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
                 value={newListName}
                 onChange={(e) => setNewListName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleCreateNewList()}
-                className="flex-1 bg-[#f0f4f8] border-[3px] border-[#01173B] rounded-xl px-3 py-2 text-xs font-bold text-[#01173B] placeholder:text-[#01173B]/40 focus:outline-none focus:border-[#0A568C]"
+                className="flex-1 bg-white border-2 border-white rounded-xl px-3 py-2 text-xs font-bold text-[#01173B] placeholder:text-[#01173B]/50 focus:outline-none focus:border-[#8CB23E]"
               />
               <button
                 onClick={handleCreateNewList}
                 disabled={!newListName.trim() || !isUnlocked}
-                className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#f0f4f8] text-[#01173B] text-xs font-black border-[3px] border-[#01173B] nexgen-label disabled:opacity-40 flex items-center gap-1"
+                className="px-3.5 py-2 rounded-xl bg-[#0A568C] hover:bg-[#0d6ab0] text-white text-xs font-black border-2 border-white/20 nexgen-label disabled:opacity-40 flex items-center gap-1"
               >
-                <Plus className="w-3.5 h-3.5 text-[#0A568C]" />
+                <Plus className="w-3.5 h-3.5" />
                 CREATE
               </button>
             </div>
           )}
         </div>
 
-        {/* Add Name Input */}
-        <div className="p-4 border-b-[3px] border-[#01173B]/10 bg-white">
+        {/* Add Name Input — dark */}
+        <div className="relative p-4 border-b border-white/10 bg-white/[0.04]">
           <div className="flex gap-2">
             <input
               type="text"
@@ -340,26 +342,26 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleAddName()}
-              className="flex-1 bg-[#f0f4f8] border-[3px] border-[#01173B] rounded-xl px-3.5 py-2.5 text-sm font-bold text-[#01173B] placeholder:text-[#01173B]/40 focus:outline-none focus:border-[#0A568C] brand-card--sm"
+              className="flex-1 bg-white border-2 border-white rounded-xl px-3.5 py-2.5 text-sm font-bold text-[#01173B] placeholder:text-[#01173B]/50 focus:outline-none focus:border-[#8CB23E]"
             />
             <button
               onClick={handleAddName}
               disabled={!newName.trim()}
-              className="px-4 py-2.5 rounded-xl bg-[#0A568C] hover:bg-[#0d6ab0] disabled:opacity-40 text-white font-black text-xs flex items-center gap-1.5 shadow border-2 border-[#01173B] transition-all active:scale-95 nexgen-label"
+              className="px-4 py-2.5 rounded-xl bg-[#0A568C] hover:bg-[#0d6ab0] disabled:opacity-40 text-white font-black text-xs flex items-center gap-1.5 shadow border-2 border-white/20 transition-all active:scale-95 nexgen-label"
             >
               <Plus className="w-4 h-4" />
               <span>ADD</span>
             </button>
           </div>
 
-          {/* Quick presets row */}
+          {/* Quick presets row — dark */}
           <div className="mt-3 flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] no-scrollbar">
-            <span className="nexgen-label text-[#01173B]/60 whitespace-nowrap">PRESETS:</span>
+            <span className="nexgen-label text-white/60 whitespace-nowrap">PRESETS:</span>
             {PRESET_GROUPS.map((preset) => (
               <button
                 key={preset.id}
                 onClick={() => handleSelectPreset(preset.names)}
-                className="px-2.5 py-1.5 rounded-full bg-white hover:bg-[#f0f4f8] text-[#01173B] hover:text-[#0A568C] border-[2px] border-[#01173B] whitespace-nowrap transition-colors nexgen-label text-[11px]"
+                className="px-2.5 py-1.5 rounded-full bg-white/10 hover:bg-white/15 text-white hover:text-[#8CB23E] border border-white/20 whitespace-nowrap transition-colors nexgen-label text-[11px]"
                 title={`Load ${preset.title} (${preset.names.length} items)`}
               >
                 {preset.title.split(' ')[0]} {preset.title.split(' ')[1] || ''}
@@ -368,57 +370,57 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
           </div>
         </div>
 
-        {/* Search & Actions Bar */}
-        <div className="px-4 py-2.5 bg-[#f0f4f8] border-b-[3px] border-[#01173B]/10 flex items-center justify-between gap-2">
+        {/* Search & Actions Bar — dark */}
+        <div className="relative px-4 py-2.5 bg-white/[0.04] border-b border-white/10 flex items-center justify-between gap-2">
           <div className="relative flex-1">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#0A568C] brand-icon" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-white/60" />
             <input
               type="text"
               placeholder="Search entries..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white border-[3px] border-[#01173B] rounded-full pl-9 pr-3 py-2 text-[12px] font-bold text-[#01173B] focus:outline-none focus:border-[#0A568C] placeholder:text-[#01173B]/40"
+              className="w-full bg-white border-2 border-white rounded-full pl-9 pr-3 py-2 text-[12px] font-bold text-[#01173B] focus:outline-none focus:border-[#8CB23E] placeholder:text-[#01173B]/50"
             />
           </div>
 
           <div className="flex items-center gap-1">
             <button
               onClick={handleShuffle}
-              className="p-2 rounded-xl bg-white hover:bg-[#f0f4f8] text-[#01173B] border-[2px] border-[#01173B] shadow-sm"
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 backdrop-blur-sm shadow-sm"
               title="Shuffle"
             >
-              <Shuffle className="w-3.5 h-3.5 text-[#0A568C] brand-icon" />
+              <Shuffle className="w-3.5 h-3.5 text-white" />
             </button>
             <button
               onClick={handleSortAZ}
-              className="p-2 rounded-xl bg-white hover:bg-[#f0f4f8] text-[#01173B] border-[2px] border-[#01173B] shadow-sm"
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 backdrop-blur-sm shadow-sm"
               title="Sort A-Z"
             >
-              <ArrowDownAZ className="w-3.5 h-3.5 text-[#0A568C] brand-icon" />
+              <ArrowDownAZ className="w-3.5 h-3.5 text-white" />
             </button>
             <button
               onClick={handleResetDefault}
-              className="p-2 rounded-xl bg-white hover:bg-[#f0f4f8] text-[#01173B] border-[2px] border-[#01173B] shadow-sm"
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 backdrop-blur-sm shadow-sm"
               title="Reset"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-[#0A568C] brand-icon" />
+              <RotateCcw className="w-3.5 h-3.5 text-white" />
             </button>
           </div>
         </div>
 
-        {/* Names List */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-[#f7f8f9]">
+        {/* Names List — dark chalkboard */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-transparent">
           {items.length === 0 ? (
             <div className="text-center py-16">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-white border-[3px] border-[#01173B] flex items-center justify-center mb-3">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-white border-2 border-white flex items-center justify-center mb-3 shadow">
                 <span className="text-2xl">📋</span>
               </div>
-              <p className="nexgen-headline text-sm text-[#01173B]">POOL IS EMPTY</p>
-              <p className="text-xs text-[#01173B]/60 mt-1">Add names, upload a roster, or load a preset.</p>
-              <button onClick={() => handleResetDefault()} className="mt-4 px-4 py-2 rounded-full bg-[#0A568C] text-white font-black text-xs border-2 border-[#01173B] nexgen-label">LOAD CLASS ROSTER (24)</button>
+              <p className="nexgen-headline text-sm text-white">POOL IS EMPTY</p>
+              <p className="text-xs text-white/60 mt-1">Add names, upload a roster, or load a preset.</p>
+              <button onClick={() => handleResetDefault()} className="mt-4 px-4 py-2 rounded-full bg-[#8CB23E] text-[#01173B] font-black text-xs border-2 border-[#8CB23E] nexgen-label shadow">LOAD CLASS ROSTER (24)</button>
             </div>
           ) : filteredItems.length === 0 ? (
-            <div className="text-center py-12 text-xs text-[#01173B]/60">
+            <div className="text-center py-12 text-xs text-white/60">
               No entries matching "{searchQuery}"
             </div>
           ) : (
@@ -428,7 +430,7 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
                 return (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-2.5 rounded-xl bg-white border-[3px] border-[#01173B] hover:border-[#0A568C] transition-colors group brand-card--sm"
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-white border-2 border-white hover:border-[#8CB23E] transition-colors group shadow-sm"
                   >
                     <div className="flex items-center gap-2.5 truncate">
                       <span className="w-5 nexgen-label text-[11px] text-[#0A568C] text-right">
@@ -455,7 +457,7 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
                 <div className="pt-2 text-center">
                   <button
                     onClick={() => setLimit((prev) => prev + 100)}
-                    className="w-full py-2.5 bg-white hover:bg-[#f0f4f8] text-[#01173B] font-black text-xs rounded-full border-[3px] border-[#01173B] transition-colors nexgen-label"
+                    className="w-full py-2.5 bg-white hover:bg-white/90 text-[#01173B] font-black text-xs rounded-full border-2 border-white transition-colors nexgen-label shadow-sm"
                   >
                     LOAD MORE (+100) — {displayedItems.length} OF {filteredItems.length.toLocaleString()}
                   </button>
@@ -465,30 +467,30 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
           )}
         </div>
 
-        {/* Pool Footer Actions */}
-        <div className="p-4 border-t-[3px] border-[#01173B] bg-white flex items-center justify-between gap-2">
+        {/* Pool Footer Actions — dark */}
+        <div className="relative p-4 border-t border-white/10 bg-[#01173B]/60 backdrop-blur-sm flex items-center justify-between gap-2">
           <button
             onClick={() => {
               sound.playButtonClick();
               onOpenBulkEditor();
             }}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white hover:bg-[#f0f4f8] text-[#01173B] text-xs font-black border-[3px] border-[#01173B] shadow-sm nexgen-label"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/15 text-white text-xs font-black border border-white/20 shadow-sm nexgen-label"
           >
-            <Upload className="w-3.5 h-3.5 text-[#0A568C] brand-icon" />
+            <Upload className="w-3.5 h-3.5 text-white" />
             <span>BULK UPLOAD</span>
           </button>
 
           <button
             onClick={handleClearPool}
             disabled={items.length === 0}
-            className="text-xs text-red-500 hover:text-red-600 disabled:opacity-30 font-black nexgen-label"
+            className="text-xs text-white/60 hover:text-white disabled:opacity-30 font-black nexgen-label"
           >
             CLEAR ALL
           </button>
 
           <button
             onClick={onClose}
-            className="px-5 py-2.5 rounded-full bg-[#01173B] hover:bg-black text-white font-black text-xs shadow border-2 border-[#01173B] nexgen-label"
+            className="px-5 py-2.5 rounded-full bg-[#8CB23E] hover:bg-[#9bc552] text-[#01173B] font-black text-xs shadow border-2 border-[#8CB23E] nexgen-label"
           >
             DONE
           </button>
