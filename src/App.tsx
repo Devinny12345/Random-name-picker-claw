@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { NameItem, CapsuleTheme, CraneState, WinnerHistoryItem, GameSettings } from './types';
 import { PRESET_GROUPS } from './data/presets';
+import { RAFFLE_NAMES } from './data/raffleNames';
 import { ClawMachine } from './components/ClawMachine';
 import { ArcadeControls } from './components/ArcadeControls';
 import { WinnerModal } from './components/WinnerModal';
@@ -27,14 +28,32 @@ const STORAGE_KEY_HISTORY = 'claw_game_history_v1';
 const STORAGE_KEY_SETTINGS = 'claw_game_settings_v1';
 
 export default function App() {
-  // Initialize items from localStorage or default classroom preset
+  // Initialize items from localStorage or raffle CSV (6656 names) for Windows local use
   const [items, setItems] = useState<NameItem[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_ITEMS);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // If saved list is the old 24-item demo and raffle data exists, upgrade to raffle list once
+        if (parsed.length < 100 && RAFFLE_NAMES.length > 1000) {
+          // Keep user-edited small lists, but if it's exactly the demo preset, use raffle
+          const demoNames = PRESET_GROUPS[0].names;
+          const isDemo = parsed.length === demoNames.length && parsed.every((it: NameItem, i: number) => it.name === demoNames[i]);
+          if (isDemo) {
+            return RAFFLE_NAMES.map((name, idx) => ({
+              id: `raffle-${idx}`,
+              name,
+              colorIndex: idx % 8,
+            }));
+          }
+        }
+        return parsed;
+      }
     } catch {}
-    return PRESET_GROUPS[0].names.map((name, idx) => ({
-      id: `default-${idx}`,
+    // No saved data — use full raffle list for local Windows use, fallback to demo preset
+    const source = RAFFLE_NAMES.length > 1000 ? RAFFLE_NAMES : PRESET_GROUPS[0].names;
+    return source.map((name, idx) => ({
+      id: `${RAFFLE_NAMES.length > 1000 ? 'raffle' : 'default'}-${idx}`,
       name,
       colorIndex: idx % 8,
     }));
