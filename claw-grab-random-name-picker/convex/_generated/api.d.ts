@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as authHelpers from "../authHelpers.js";
+import type * as clearDrum from "../clearDrum.js";
 import type * as lists from "../lists.js";
 import type * as listsMutations from "../listsMutations.js";
 import type * as raffleNames from "../raffleNames.js";
@@ -24,6 +25,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   authHelpers: typeof authHelpers;
+  clearDrum: typeof clearDrum;
   lists: typeof lists;
   listsMutations: typeof listsMutations;
   raffleNames: typeof raffleNames;

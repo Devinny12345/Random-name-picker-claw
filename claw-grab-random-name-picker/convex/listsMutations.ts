@@ -75,6 +75,20 @@ export const remove = mutation({
   },
 });
 
+// Delete names for a list in chunks (avoids the read limit). Call repeatedly until empty.
+export const clearNames = mutation({
+  args: { listId: v.id("lists"), passcode: v.string(), limit: v.optional(v.number()) },
+  handler: async (ctx, { listId, passcode, limit = 250 }) => {
+    const doc = await ensureAppDoc(ctx);
+    if (!(await checkPasscode(doc, passcode))) throw new Error("unauthorized: invalid passcode");
+    const existing = await ctx.db.query("names").withIndex("by_list", (q) => q.eq("listId", listId)).take(limit);
+    const ids = existing.map((n) => n._id);
+    await Promise.all(ids.map((id) => ctx.db.delete(id)));
+    const remaining = await ctx.db.query("names").withIndex("by_list", (q) => q.eq("listId", listId)).first();
+    return { deleted: ids.length, remaining: remaining ? 1 : 0 };
+  },
+});
+
 // Rename a list. Passcode required.
 export const rename = mutation({
   args: { listId: v.id("lists"), name: v.string(), passcode: v.string() },

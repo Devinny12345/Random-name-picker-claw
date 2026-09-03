@@ -257,7 +257,7 @@ const ClawMachineInner: React.FC<ClawMachineProps> = ({
     // tipY = 40 + cablePx + 58 = cablePx + 98 ; floor top = chamberH - 16
     // so max cable that lets tip *meet* floor: H -16 -98 = H -114
     const minH = 24;
-    const maxH = Math.max(120, chamberH - 114); // tip meets floor, no penetration
+    const maxH = Math.max(120, chamberH - 120); // tip stops a few px above the floor, never passes through
     const t = Math.max(0, Math.min(1, (cableHeight - 10) / (118 - 10)));
     return minH + t * (maxH - minH);
   }, [chamberH, cableHeight]);
@@ -469,9 +469,36 @@ const ClawMachineInner: React.FC<ClawMachineProps> = ({
 
   useEffect(() => { if (chamberRef.current) resettle(); }, [theme]);
 
+  // Fixed logical display size (16:9 "TV"). All physics/layout is computed at this
+  // constant resolution, then the whole stage is transformed to fit the window so
+  // the content (100 balls) is identical on every screen — scaled, never cropped.
+  const BASE_DISPLAY_W = 960;
+  const BASE_DISPLAY_H = 540;
+  const baseScaleRef = useRef(1);
+  const [baseScale, setBaseScale] = useState(1);
+  const fitRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = fitRef.current;
+    if (!el) return;
+    const upd = () => {
+      const r = el.getBoundingClientRect();
+      const s = Math.max(0.2, Math.min(r.width / BASE_DISPLAY_W, r.height / BASE_DISPLAY_H));
+      baseScaleRef.current = s;
+      setBaseScale(s);
+    };
+    upd();
+    const ro = new ResizeObserver(upd);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center select-none flex-1 py-1">
-      <div className="relative aspect-[16/9] w-full max-w-[calc(100vh*1.22)] h-auto min-h-[340px] rounded-[22px] p-[4px] wood-frame flex flex-col overflow-hidden">
+    <div ref={fitRef} className="relative w-full h-full flex items-center justify-center select-none overflow-hidden">
+      <div
+        className="relative origin-center rounded-[22px] p-[4px] wood-frame flex flex-col overflow-hidden"
+        style={{ width: BASE_DISPLAY_W, height: BASE_DISPLAY_H, transform: `scale(${baseScale})`, pointerEvents: baseScale > 0 ? 'auto' : 'none' }}
+      >
         {/* inner chalkboard surface */}
         <div className="relative flex-1 flex flex-col chalkboard-bg--navy rounded-[18px] border border-white/10 overflow-hidden p-2.5 sm:p-3">
           {/* wood grain top highlight */}
