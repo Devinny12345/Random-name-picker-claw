@@ -547,7 +547,7 @@ export default function App() {
   }, [currentList, passcode]);
 
   return (
-    <div className="relative w-screen h-screen bg-[#FF00FF] text-white flex flex-col overflow-hidden">
+    <div className="relative w-screen h-screen bg-[#01173B] text-white flex flex-col overflow-hidden">
       {/* Chalk dust vignette */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.45]" style={{ background: 'radial-gradient(ellipse at center, transparent 58%, rgba(0,0,0,0.55) 100%)' }} />
       <div className="absolute inset-0 pointer-events-none opacity-15" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E")` }} />
