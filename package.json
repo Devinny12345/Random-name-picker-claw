@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
+    "dev": "vite --port=4545 --host=0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "node -e \"try{require('fs').rmSync('dist',{recursive:true,force:true})}catch(e){};try{require('fs').rmSync('server.js',{force:true})}catch(e){}\"",

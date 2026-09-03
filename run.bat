@@ -57,7 +57,7 @@ if not exist "node_modules" (
 )
 
 REM --- Start dev server ---
-echo Starting dev server on http://localhost:3000 ...
+echo Starting dev server on http://localhost:4545 ...
 echo Press Ctrl+C to stop.
 echo.
 call npm run dev

@@ -6,20 +6,20 @@ Arcade-style claw machine for picking random student names. Multiple lists, pass
 
 ### Windows - Double-click to run
 1. Double-click **`run.bat`**
-2. Browser opens at **http://localhost:3000**
+2. Browser opens at **http://localhost:4545**
 3. That's it! Backend is already on Convex Cloud (`bright-mink-448.convex.cloud`)
 
 ### macOS / Linux
 ```bash
-./run.sh
+./run.sh            # or double-click run.command
 # or
-npm install && npm run dev
+npm install && npm run dev   # http://localhost:4545
 ```
 
 ### Manual (any OS)
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # http://localhost:4545
 npm run build      # production build to dist/
 npm run preview    # preview production build
 ```
@@ -41,7 +41,7 @@ npm run preview    # preview production build
 Tables: `app` (passcode), `lists` (multiple name lists), `names` (entries per list), `history` (winners).
 Functions: `auth.verify`/`change`, `lists.listAll`/`getByCode`, `listsMutations.create/saveNames/saveHistory/remove/rename`, `seed.ensureDefault`.
 
-Seed on first load: 3 lists including "BACK TO SCHOOL RAFFLE" with 20 names.
+Seed on first load: 3 lists including "RAFFLE NAMES" with 6656 names from raffle CSV.
 
 ## Deploy to Vercel
 

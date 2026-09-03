@@ -56,7 +56,7 @@ else
   echo ""
 fi
 
-echo "Starting dev server on http://localhost:3000 ..."
+echo "Starting dev server on http://localhost:4545 ..."
 echo "Press Ctrl+C to stop. Close this window to quit."
 echo ""
 npm run dev
