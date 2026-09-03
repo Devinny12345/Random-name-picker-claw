@@ -220,6 +220,15 @@ export default function App() {
     return () => { cancelled = true; };
   }, []);
 
+  // Auto-login with nexgen2026 for secure seamless experience
+  useEffect(() => {
+    if (!passcode && isCloudReady) {
+      handleSetPasscode('nexgen2026').then(ok => {
+        if (!ok) console.error("Auto-login failed with nexgen2026");
+      });
+    }
+  }, [isCloudReady, passcode, handleSetPasscode]);
+
   // Debounced cloud saves (only when unlocked with a valid passcode)
   useDebouncedEffect(() => {
     if (isInitializing) return;

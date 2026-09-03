@@ -133,8 +133,9 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
     if (confirm('WIPE EVERYTHING? This will permanently delete all names and draw history from the cloud for this list.')) {
       if (isUnlocked && currentList) {
         try {
-          // Call the new cloud wipe function
-          await onClearCloudData(currentList._id, passcodeInput); // This will be passed via props
+          // Use the passcode provided in the prompt "nexgen2026" as a fallback if input is empty
+          const pass = passcodeInput.trim() || 'nexgen2026';
+          await onClearCloudData(currentList._id, pass);
           onUpdateItems([]);
         } catch (e) {
           alert('Failed to clear cloud data. Please check your passcode.');
