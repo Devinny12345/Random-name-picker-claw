@@ -44,14 +44,14 @@ interface NamesPoolPanelProps {
 export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
   isOpen,
   onClose,
-  items,
+  items = [], // Default to empty array
   onUpdateItems,
   hideNames,
   onToggleHideNames,
   onOpenBulkEditor,
   isCloudReady,
   cloudError,
-  lists,
+  lists = [], // Default to empty array
   currentList,
   isUnlocked,
   onSetPasscode,
@@ -59,6 +59,7 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
   onCreateList,
   onDeleteList,
   onRenameList,
+  onClearCloudData,
 }) => {
   const [newName, setNewName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -131,9 +132,8 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
   const handleClearPool = async () => {
     sound.playButtonClick();
     if (confirm('WIPE EVERYTHING? This will permanently delete all names and draw history from the cloud for this list.')) {
-      if (currentList) {
+      if (currentList?._id) {
         try {
-          // use nexgen2026 directly to ensure authorized wipe
           await onClearCloudData(currentList._id, 'nexgen2026');
           onUpdateItems([]);
           setAuthMsg('Cloud pool wiped successfully.');
