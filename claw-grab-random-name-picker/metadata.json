@@ -1,0 +1,6 @@
+{
+  "name": "Claw Grab Random Name Picker",
+  "description": "An arcade crane claw machine random name picker with interactive physics, sounds, customizable names, and celebration animations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
