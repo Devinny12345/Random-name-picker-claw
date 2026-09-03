@@ -1,6 +1,16 @@
 // Auto-generated from "raffle names - Sheet1.csv" - 6656 entries
 // Local fallback for Windows/offline use. Synced with convex/raffleNames.ts
 export const RAFFLE_NAMES: string[] = [
+  "TEST USER 1",
+  "TEST USER 2",
+  "TEST USER 3",
+  "TEST USER 4",
+  "TEST USER 5",
+  "TEST USER 6",
+  "TEST USER 7",
+  "TEST USER 8",
+  "TEST USER 9",
+  "TEST USER 10",
   "Daemon Acevedo",
   "Alan Acosta",
   "Monique Acosta",
