@@ -93,13 +93,10 @@ export default function App() {
           hideNames: true,
           binCount: 40,
           ...parsed,
-          // enforce brand title if old classroom title is still the default
           classroomTitle: parsed.classroomTitle === 'Classroom Student Picker' ? 'NEXGEN BACK TO SCHOOL RAFFLE' : (parsed.classroomTitle || 'NEXGEN BACK TO SCHOOL RAFFLE'),
         };
       }
-    } catch {
-      // fallback
-    }
+    } catch {}
     return {
       soundEnabled: true,
       volume: 0.6,
@@ -112,6 +109,8 @@ export default function App() {
       binCount: 40,
     };
   });
+
+  const [isInitializing, setIsInitializing] = useState(true);
 
   // Crane & Claw State
   const [craneState, setCraneState] = useState<CraneState>('idle');
@@ -211,6 +210,17 @@ export default function App() {
             localStorage.setItem('claw_current_list_code', target.listCode);
           }
         }
+        if (!cancelled) setIsCloudReady(true);
+      } catch {
+        if (!cancelled) { setCloudError('Cloud unavailable'); setIsCloudReady(true); }
+      } finally {
+        setIsInitializing(false);
+      }
+    })();
+
+            localStorage.setItem('claw_current_list_code', target.listCode);
+          }
+        }
 
         if (!cancelled) setIsCloudReady(true);
       } catch {
@@ -222,12 +232,14 @@ export default function App() {
 
   // Debounced cloud saves (only when unlocked with a valid passcode)
   useDebouncedEffect(() => {
+    if (isInitializing) return;
     if (passcodeRef.current && currentList) {
       saveNames(currentList._id, items, passcodeRef.current).catch(() => {});
     }
   }, [items, currentList], 800);
 
   useDebouncedEffect(() => {
+    if (isInitializing) return;
     if (passcodeRef.current && currentList) {
       saveHistory(currentList._id, history, passcodeRef.current).catch(() => {});
     }
