@@ -62,7 +62,16 @@ export const PRIZE_MAP: Record<PrizeId, Prize> = {
   '3rd': PRIZES[2],
 };
 
-export function getPrize(id: PrizeId | string | null | undefined): Prize | null {
+export function getPrize(id: PrizeId | string | null | undefined, overrides?: any): Prize | null {
   if (!id) return null;
-  return (PRIZE_MAP as Record<string, Prize>)[id] ?? null;
+  const basePrize = (PRIZE_MAP as Record<string, Prize>)[id] ?? null;
+  if (!basePrize) return null;
+
+  if (overrides && overrides[id]) {
+    return {
+      ...basePrize,
+      ...overrides[id],
+    };
+  }
+  return basePrize;
 }

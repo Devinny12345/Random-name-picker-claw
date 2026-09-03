@@ -323,7 +323,8 @@ export default function App() {
         }
       }
       const prizeForThisDraw: PrizeId | null = effectivePrize;
-      const prizeMetaForDraw = prizeForThisDraw ? getPrize(prizeForThisDraw) : null;
+      const prizeMetaForDraw = prizeForThisDraw ? getPrize(prizeForThisDraw, settings.prizes) : null;
+
 
       clearAllTimeouts();
 
@@ -461,6 +462,7 @@ export default function App() {
           prizeLabel: prizeMetaForDraw ? `${prizeMetaForDraw.placeLabel} • ${prizeMetaForDraw.value}` : null,
         };
         setHistory((prev) => [newHistoryItem, ...prev]);
+
         if (settings.removeOnPick) {
           pool[randomIndex] = pool[pool.length - 1];
           pool.pop();
@@ -639,12 +641,13 @@ export default function App() {
       />
 
       {/* Winner Pop-up Celebration Modal — with prize SVG display */}
-      <WinnerModal
-        winner={winnerModalItem}
-        prize={winnerPrize ? getPrize(winnerPrize) : null}
-        theme={settings.theme}
-        totalRemaining={items.length}
-        onClose={() => { setWinnerModalItem(null); setWinnerPrize(null); }}
+       <WinnerModal
+         winner={winnerModalItem}
+         prize={winnerPrize ? getPrize(winnerPrize, settings.prizes) : null}
+         theme={settings.theme}
+         totalRemaining={items.length}
+         onClose={() => { setWinnerModalItem(null); setWinnerPrize(null); }}
+
         onRemoveWinner={handleRemoveWinner}
         onKeepWinner={() => {}}
         onPickAgain={() => {

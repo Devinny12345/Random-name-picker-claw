@@ -86,6 +86,73 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6 bg-[#f7f8f9]">
+          {/* Prize Configuration */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 rounded-full bg-amber-500" />
+              <label className="text-[11px] font-black tracking-widest text-[#01173B] uppercase">Prize Customization</label>
+            </div>
+            {(['1st', '2nd', '3rd'] as const).map((id) => (
+              <div key={id} className="rounded-2xl bg-white border-[3px] border-[#01173B] p-4 shadow-[0_4px_16px_rgba(1,23,59,0.12)] space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className={`text-[11px] font-black px-2 py-0.5 rounded-full text-white ${id === '1st' ? 'bg-amber-500' : id === '2nd' ? 'bg-slate-400' : 'bg-orange-600'}`}>
+                    {id.toUpperCase()} PLACE
+                  </span>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-[10px] font-bold text-[#01173B]/60 uppercase">Prize Title</label>
+                    <input
+                      value={settings.prizes?.[id]?.title || ''}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        onUpdateSettings({
+                          prizes: {
+                            ...settings.prizes,
+                            [id]: { ...settings.prizes?.[id], title: val }
+                          }
+                        });
+                      }}
+                      className="mt-1 w-full bg-[#f0f4f8] border-2 border-[#01173B]/10 rounded-xl px-3 py-2 text-sm font-bold text-[#01173B] focus:outline-none focus:border-[#0A568C]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-[#01173B]/60 uppercase">Prize Value</label>
+                    <input
+                      value={settings.prizes?.[id]?.value || ''}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        onUpdateSettings({
+                          prizes: {
+                            ...settings.prizes,
+                            [id]: { ...settings.prizes?.[id], value: val }
+                          }
+                        });
+                      }}
+                      className="mt-1 w-full bg-[#f0f4f8] border-2 border-[#01173B]/10 rounded-xl px-3 py-2 text-sm font-bold text-[#01173B] focus:outline-none focus:border-[#0A568C]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-[#01173B]/60 uppercase">Description</label>
+                    <textarea
+                      value={settings.prizes?.[id]?.longDescription || ''}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        onUpdateSettings({
+                          prizes: {
+                            ...settings.prizes,
+                            [id]: { ...settings.prizes?.[id], longDescription: val }
+                          }
+                        });
+                      }}
+                      className="mt-1 w-full bg-[#f0f4f8] border-2 border-[#01173B]/10 rounded-xl px-3 py-2 text-sm font-bold text-[#01173B] focus:outline-none focus:border-[#0A568C"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
           {/* Classroom Title */}
           <div className="rounded-2xl bg-white border-[3px] border-[#01173B] p-4 shadow-[0_4px_16px_rgba(1,23,59,0.12)]">
             <label className="text-[11px] font-black tracking-widest text-[#01173B] uppercase">Event Title</label>

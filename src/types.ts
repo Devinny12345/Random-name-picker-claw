@@ -39,4 +39,9 @@ export interface GameSettings {
   hideNames: boolean; // Hide names on capsules (mystery mode)
   classroomTitle?: string; // e.g. "Room 101", "Class 4B", "Science Period 3"
   binCount: number; // Number of capsule balls that fall into and fill the bin
+  prizes?: {
+    '1st': { title: string; value: string; longDescription: string };
+    '2nd': { title: string; value: string; longDescription: string };
+    '3rd': { title: string; value: string; longDescription: string };
+  };
 }
