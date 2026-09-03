@@ -56,16 +56,34 @@ export async function saveHistory(
   history: WinnerHistoryItem[],
   passcode: string
 ) {
-  await convex.mutation(api.listsMutations.saveHistory, {
-    listId: listId as any,
-    passcode,
-    history: history.map((h) => ({
-      name: h.name,
-      colorIndex: h.colorIndex,
-      theme: h.theme,
-      createdAt: new Date(h.timestamp).getTime(),
-    })),
-  });
+  const payload = history.map((h) => ({
+    name: h.name,
+    colorIndex: h.colorIndex,
+    theme: h.theme,
+    createdAt: new Date(h.timestamp).getTime(),
+    prizeId: h.prizeId ?? undefined,
+    prizeLabel: h.prizeLabel ?? undefined,
+  }));
+  try {
+    await convex.mutation(api.listsMutations.saveHistory, {
+      listId: listId as any,
+      passcode,
+      history: payload as any,
+    });
+  } catch (e: any) {
+    // Fallback for old deployed functions that don't yet accept prizeId/prizeLabel
+    const msg = String(e?.message ?? e);
+    if (msg.includes('prizeId') || msg.includes('prizeLabel') || msg.includes('Validator')) {
+      const legacy = payload.map(({ prizeId, prizeLabel, ...rest }) => rest);
+      await convex.mutation(api.listsMutations.saveHistory, {
+        listId: listId as any,
+        passcode,
+        history: legacy as any,
+      });
+    } else {
+      throw e;
+    }
+  }
 }
 
 export async function changePasscode(oldPasscode: string, newPasscode: string) {

@@ -1,28 +1,34 @@
 import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Sparkles, Trophy, Trash2, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Sparkles, Trophy, Trash2, CheckCircle2, RotateCcw, Eye } from 'lucide-react';
 import { NameItem, CapsuleTheme } from '../types';
 import { CAPSULE_PALETTES } from '../data/presets';
+import { Prize } from '../data/prizes';
+import { PrizeSVG } from './PrizeSVGs';
 import { sound } from '../utils/audio';
 
 interface WinnerModalProps {
   winner: NameItem | null;
+  prize: Prize | null;
   theme: CapsuleTheme;
   totalRemaining: number;
   onClose: () => void;
   onRemoveWinner: (item: NameItem) => void;
   onKeepWinner: () => void;
   onPickAgain: () => void;
+  onReview?: () => void;
 }
 
 export const WinnerModal: React.FC<WinnerModalProps> = ({
   winner,
+  prize,
   theme,
   totalRemaining,
   onClose,
   onRemoveWinner,
   onKeepWinner,
   onPickAgain,
+  onReview,
 }) => {
   useEffect(() => {
     if (winner) {
@@ -59,15 +65,31 @@ export const WinnerModal: React.FC<WinnerModalProps> = ({
           {/* brand swoosh under badge */}
           <div className="absolute top-7 left-6 right-6 h-[3px] brand-swoosh opacity-70" />
 
-          {/* Trophy — icon in brand palette */}
-          <div className="relative mt-4 mb-3 w-16 h-16 rounded-2xl bg-[#01173B] border-[3px] border-[#8CB23E] flex items-center justify-center shadow-[0_6px_18px_rgba(1,23,59,0.35)] transform -rotate-2">
-            <Trophy className="w-8 h-8 text-[#8CB23E]" />
-            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#009CFF] border-2 border-white flex items-center justify-center text-[10px]">✦</span>
-          </div>
+          {/* Prize SVG Display */}
+          {prize ? (
+            <div className="relative mt-4 mb-2 w-full flex flex-col items-center">
+              <div className={`w-[180px] h-[150px] rounded-2xl border-[3px] border-[#01173B] bg-white shadow-[0_8px_22px_rgba(1,23,59,0.25)] p-2`}>
+                <PrizeSVG prizeId={prize.id} className="w-full h-full" />
+              </div>
+              <div className="mt-3 flex items-center gap-2 flex-wrap justify-center">
+                <span className={`inline-flex px-3 py-1 rounded-full text-white text-xs font-black tracking-widest bg-gradient-to-r ${prize.badgeColor} border-2 border-white shadow`}>{prize.placeLabel}</span>
+                <span className="inline-flex px-2 py-1 rounded-full bg-[#01173B] text-white text-xs font-black">{prize.value}</span>
+              </div>
+              <div className="mt-1 text-center">
+                <div className="nexgen-headline text-sm text-[#01173B]">{prize.title}</div>
+                <div className="text-[11px] text-[#01173B]/60 max-w-[320px] mx-auto">{prize.longDescription}</div>
+              </div>
+            </div>
+          ) : (
+            <div className="relative mt-4 mb-3 w-16 h-16 rounded-2xl bg-[#01173B] border-[3px] border-[#8CB23E] flex items-center justify-center shadow-[0_6px_18px_rgba(1,23,59,0.35)] transform -rotate-2">
+              <Trophy className="w-8 h-8 text-[#8CB23E]" />
+              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#009CFF] border-2 border-white flex items-center justify-center text-[10px]">✦</span>
+            </div>
+          )}
 
           <span className="nexgen-label text-[11px] text-[#0A568C] mb-1 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-[#8CB23E] animate-pulse brand-icon" />
-            WINNER CHUTE • NEXGEN RAFFLE
+            {prize ? `${prize.placeLabel} WINNER • NEXGEN RAFFLE` : 'WINNER CHUTE • NEXGEN RAFFLE'}
             <Sparkles className="w-3.5 h-3.5 text-[#8CB23E] animate-pulse brand-icon" />
           </span>
 
@@ -130,6 +152,15 @@ export const WinnerModal: React.FC<WinnerModalProps> = ({
               <span>Draw Next</span>
             </button>
           </div>
+          {onReview && (
+            <button
+              onClick={() => { sound.playButtonClick(); onReview(); }}
+              className="mt-2 w-full py-2.5 rounded-xl bg-white hover:bg-[#f7f8f9] border-2 border-[#01173B] text-[#01173B] font-black text-xs flex items-center justify-center gap-1.5"
+            >
+              <Eye className="w-4 h-4 text-[#0A568C]" />
+              REVIEW ALL WINNERS
+            </button>
+          )}
           <p className="mt-3 text-[10px] font-bold tracking-widest uppercase text-[#01173B]/35">Chalk • Orbit Green • Midnight Navy</p>
       </div>
     </div>

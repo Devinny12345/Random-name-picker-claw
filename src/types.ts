@@ -17,12 +17,16 @@ export type CapsuleTheme =
 
 export type CraneState = 'idle' | 'moving_manual' | 'auto_targeting' | 'hunting' | 'lowering' | 'grabbing' | 'lifting' | 'returning' | 'dropping' | 'revealing';
 
+export type PrizeId = '1st' | '2nd' | '3rd';
+
 export interface WinnerHistoryItem {
   id: string;
   name: string;
   timestamp: Date;
   colorIndex: number;
   theme: CapsuleTheme;
+  prizeId?: PrizeId | null;
+  prizeLabel?: string | null;
 }
 
 export interface GameSettings {

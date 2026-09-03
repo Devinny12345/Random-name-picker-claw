@@ -27,13 +27,15 @@ export default defineSchema({
     .index("by_list_position", ["listId", "position"])
     .index("by_list", ["listId"]),
 
-  // Winners drawn from a list
+  // Winners drawn from a list — now with prize
   history: defineTable({
     listId: v.id("lists"),
     name: v.string(),
     colorIndex: v.number(),
     theme: v.string(),
     createdAt: v.number(),
+    prizeId: v.optional(v.string()),
+    prizeLabel: v.optional(v.string()),
   })
     .index("by_list", ["listId"])
     .index("by_list_created", ["listId", "createdAt"]),

@@ -43,12 +43,12 @@ export const saveNames = mutation({
   },
 });
 
-// Save the draw history for a list. Passcode required.
+// Save the draw history for a list. Passcode required. Now with prize fields.
 export const saveHistory = mutation({
   args: {
     listId: v.id("lists"),
     passcode: v.string(),
-    history: v.array(v.object({ name: v.string(), colorIndex: v.number(), theme: v.string(), createdAt: v.number() })),
+    history: v.array(v.object({ name: v.string(), colorIndex: v.number(), theme: v.string(), createdAt: v.number(), prizeId: v.optional(v.string()), prizeLabel: v.optional(v.string()) })),
   },
   handler: async (ctx, { listId, passcode, history }) => {
     const doc = await ensureAppDoc(ctx);
@@ -56,7 +56,7 @@ export const saveHistory = mutation({
     const existing = await ctx.db.query("history").withIndex("by_list", (q) => q.eq("listId", listId)).collect();
     await Promise.all(existing.map((h) => ctx.db.delete(h._id)));
     for (const h of history) {
-      await ctx.db.insert("history", { listId, ...h });
+      await ctx.db.insert("history", { listId, name: h.name, colorIndex: h.colorIndex, theme: h.theme, createdAt: h.createdAt, prizeId: (h as any).prizeId ?? undefined, prizeLabel: (h as any).prizeLabel ?? undefined });
     }
   },
 });

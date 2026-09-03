@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { NameItem, CapsuleTheme, CraneState, WinnerHistoryItem, GameSettings } from './types';
+import { NameItem, CapsuleTheme, CraneState, WinnerHistoryItem, GameSettings, PrizeId } from './types';
 import { PRESET_GROUPS } from './data/presets';
 import { RAFFLE_NAMES } from './data/raffleNames';
+import { PRIZES, getPrize } from './data/prizes';
 import { ClawMachine } from './components/ClawMachine';
 import { ArcadeControls } from './components/ArcadeControls';
 import { WinnerModal } from './components/WinnerModal';
@@ -9,6 +10,8 @@ import { NameEditorModal } from './components/NameEditorModal';
 import { NamesPoolPanel } from './components/NamesPoolPanel';
 import { HistoryDrawer } from './components/HistoryDrawer';
 import { SettingsDrawer } from './components/SettingsDrawer';
+import { PrizeSelector } from './components/PrizeSelector';
+import { PrizeReviewModal } from './components/PrizeReviewModal';
 import { sound } from './utils/audio';
 import { fetchLists, fetchListByCode, initDefaultList, saveNames, saveHistory, createList, renameList, deleteList, verifyPasscode } from './lib/poolApi';
 import type { ListSummary, LoadedList } from './lib/convexClient';
@@ -124,6 +127,25 @@ export default function App() {
   const [isPoolOpen, setIsPoolOpen] = useState<boolean>(false);
   const [isEditorOpen, setIsEditorOpen] = useState<boolean>(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
+  const [isPrizeReviewOpen, setIsPrizeReviewOpen] = useState<boolean>(false);
+  const [winnerPrize, setWinnerPrize] = useState<PrizeId | null>(null);
+  // Prize draw selection — freedom to start with 3rd, 2nd or 1st
+  const [selectedPrize, setSelectedPrize] = useState<PrizeId | null>(() => {
+    const saved = localStorage.getItem('claw_selected_prize_v1');
+    if (saved && ['1st','2nd','3rd'].includes(saved)) return saved as PrizeId;
+    return '3rd';
+  });
+  useEffect(() => {
+    if (selectedPrize) localStorage.setItem('claw_selected_prize_v1', selectedPrize);
+  }, [selectedPrize]);
+  // Auto-advance to next undrawn prize after a draw (keeps freedom to manually override)
+  useEffect(() => {
+    if (!history.length) return;
+    if (selectedPrize && history.some((h) => h.prizeId === selectedPrize)) {
+      const next = (['3rd','2nd','1st'] as PrizeId[]).find((pid) => !history.some((h) => h.prizeId === pid));
+      if (next) setSelectedPrize(next);
+    }
+  }, [history, selectedPrize]);
 
   const animationTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -181,7 +203,7 @@ export default function App() {
             setCurrentList(data);
             setItems(data.names.map((n) => ({ id: n.id, name: n.name, colorIndex: n.colorIndex })));
             setHistory(data.history.map((h) => ({
-              id: h.id, name: h.name, colorIndex: h.colorIndex, theme: h.theme as CapsuleTheme, timestamp: new Date(h.createdAt),
+              id: h.id, name: h.name, colorIndex: h.colorIndex, theme: h.theme as CapsuleTheme, timestamp: new Date(h.createdAt), prizeId: (h as any).prizeId as PrizeId | null ?? null, prizeLabel: (h as any).prizeLabel ?? null,
             })));
             localStorage.setItem('claw_current_list_code', target.listCode);
           }
@@ -222,7 +244,7 @@ export default function App() {
     setCurrentList(data);
     setItems(data.names.map((n) => ({ id: n.id, name: n.name, colorIndex: n.colorIndex })));
     setHistory(data.history.map((h) => ({
-      id: h.id, name: h.name, colorIndex: h.colorIndex, theme: h.theme as CapsuleTheme, timestamp: new Date(h.createdAt),
+      id: h.id, name: h.name, colorIndex: h.colorIndex, theme: h.theme as CapsuleTheme, timestamp: new Date(h.createdAt), prizeId: (h as any).prizeId as PrizeId | null ?? null, prizeLabel: (h as any).prizeLabel ?? null,
     })));
     localStorage.setItem('claw_current_list_code', listCode);
   }, []);
@@ -279,12 +301,29 @@ export default function App() {
     }, 100);
   }, [craneState]);
 
+  // Prize selection helper
+  const handleSelectPrize = useCallback((id: PrizeId) => {
+    sound.playButtonClick();
+    setSelectedPrize(id);
+  }, []);
+
   // Trigger claw sequence — 12-20s dramatic arcade run
   const startClawSequence = useCallback(
     (manualTargetX?: number) => {
       const pool = poolRef.current;
       if (pool.length === 0) return;
       if (craneState !== 'idle' && craneState !== 'moving_manual') return;
+      // Determine prize for this draw — freedom to pick 1st/2nd/3rd first, but auto-pick 3rd->2nd->1st if none selected
+      let effectivePrize: PrizeId | null = selectedPrize;
+      if (!effectivePrize) {
+        const undrawn = (['3rd','2nd','1st'] as PrizeId[]).find((pid) => !history.some((h) => h.prizeId === pid));
+        if (undrawn) {
+          effectivePrize = undrawn;
+          setSelectedPrize(undrawn);
+        }
+      }
+      const prizeForThisDraw: PrizeId | null = effectivePrize;
+      const prizeMetaForDraw = prizeForThisDraw ? getPrize(prizeForThisDraw) : null;
 
       clearAllTimeouts();
 
@@ -407,16 +446,19 @@ export default function App() {
       // capsule tumbles in chute
       stepTime += getSpeedDelay(380);
 
-      // Phase 8: Reveal — winner pops
+      // Phase 8: Reveal — winner pops (with prize)
       schedule(() => {
         setCraneState('revealing');
         setWinnerModalItem(chosenItem);
+        setWinnerPrize(prizeForThisDraw);
         const newHistoryItem: WinnerHistoryItem = {
           id: `${Date.now()}`,
           name: chosenItem.name,
           timestamp: new Date(),
           colorIndex: chosenItem.colorIndex,
           theme: settings.theme,
+          prizeId: prizeForThisDraw ?? null,
+          prizeLabel: prizeMetaForDraw ? `${prizeMetaForDraw.placeLabel} • ${prizeMetaForDraw.value}` : null,
         };
         setHistory((prev) => [newHistoryItem, ...prev]);
         if (settings.removeOnPick) {
@@ -427,7 +469,7 @@ export default function App() {
         setCraneState('idle');
       }, stepTime);
     },
-    [craneState, settings.speed, settings.theme, settings.removeOnPick]
+    [craneState, settings.speed, settings.theme, settings.removeOnPick, selectedPrize, history]
   );
 
   // Trigger from Big Grab Button
@@ -536,6 +578,17 @@ export default function App() {
         <div className="h-2 mx-2 rounded-b-xl bg-gradient-to-b from-[#2c1e14]/60 to-transparent blur-[1px] -mt-1" />
       </header>
 
+      {/* Prize Selector — pick 1st/2nd/3rd first, freedom in any order, SVG display */}
+      <div className="relative z-10 w-full py-2 sm:py-3">
+        <PrizeSelector
+          selectedPrize={selectedPrize}
+          onSelectPrize={handleSelectPrize}
+          history={history}
+          onReview={() => setIsPrizeReviewOpen(true)}
+          disabled={craneState !== 'idle' && craneState !== 'moving_manual'}
+        />
+      </div>
+
       {/* Main Arcade Claw Machine Viewport — 16:9 */}
       <main className="w-full flex-1 flex items-center justify-center px-2 sm:px-4 py-2 sm:py-3 relative z-10 min-h-0">
         <ClawMachine
@@ -585,12 +638,13 @@ export default function App() {
         currentListName={currentList?.name ?? null}
       />
 
-      {/* Winner Pop-up Celebration Modal */}
+      {/* Winner Pop-up Celebration Modal — with prize SVG display */}
       <WinnerModal
         winner={winnerModalItem}
+        prize={winnerPrize ? getPrize(winnerPrize) : null}
         theme={settings.theme}
         totalRemaining={items.length}
-        onClose={() => setWinnerModalItem(null)}
+        onClose={() => { setWinnerModalItem(null); setWinnerPrize(null); }}
         onRemoveWinner={handleRemoveWinner}
         onKeepWinner={() => {}}
         onPickAgain={() => {
@@ -598,6 +652,7 @@ export default function App() {
             handleTriggerGrab();
           }, 300);
         }}
+        onReview={() => { setWinnerModalItem(null); setIsPrizeReviewOpen(true); }}
       />
 
       {/* Names Pool Side Panel */}
@@ -639,6 +694,14 @@ export default function App() {
         history={history}
         onRestoreWinner={handleRestoreWinner}
         onClearHistory={() => setHistory([])}
+      />
+
+      {/* Prize Review Modal — SVG display + review all winners by place */}
+      <PrizeReviewModal
+        isOpen={isPrizeReviewOpen}
+        onClose={() => setIsPrizeReviewOpen(false)}
+        history={history}
+        onRestoreWinner={handleRestoreWinner}
       />
     </div>
   );

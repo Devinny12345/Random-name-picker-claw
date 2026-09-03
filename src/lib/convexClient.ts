@@ -30,5 +30,7 @@ export type LoadedList = {
     colorIndex: number;
     theme: string;
     createdAt: number;
+    prizeId?: string | null;
+    prizeLabel?: string | null;
   }[];
 };

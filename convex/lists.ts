@@ -32,7 +32,7 @@ export const getByCode = query({
       listCode: list.listCode,
       createdAt: list.createdAt,
       names: names.map((n) => ({ id: n._id, name: n.name, colorIndex: n.colorIndex })),
-      history: history.map((h) => ({ id: h._id, name: h.name, colorIndex: h.colorIndex, theme: h.theme, createdAt: h.createdAt })),
+      history: history.map((h) => ({ id: h._id, name: h.name, colorIndex: h.colorIndex, theme: h.theme, createdAt: h.createdAt, prizeId: (h as any).prizeId ?? null, prizeLabel: (h as any).prizeLabel ?? null })),
     };
   },
 });

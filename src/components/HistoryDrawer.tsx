@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { X, History, RotateCcw, Copy, Check, Trash2 } from 'lucide-react';
+import { X, History, RotateCcw, Copy, Check, Trash2, Award } from 'lucide-react';
 import { WinnerHistoryItem } from '../types';
+import { getPrize } from '../data/prizes';
+import { PrizeSVG } from './PrizeSVGs';
 import { sound } from '../utils/audio';
 
 interface HistoryDrawerProps {
@@ -90,39 +92,58 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                 <History className="w-6 h-6 text-[#0A568C] brand-icon" />
               </div>
               <p className="nexgen-headline text-sm text-[#01173B]">NO DRAWS YET</p>
-              <p className="text-xs text-[#01173B]/60 mt-1">Grab a capsule to start logging winners!</p>
+              <p className="text-xs text-[#01173B]/60 mt-1">Select a prize, then grab a capsule to start!</p>
             </div>
           ) : (
-            history.map((h, idx) => (
-              <div
-                key={h.id}
-                className="flex items-center justify-between p-3 brand-card brand-card--sm"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="w-7 h-7 rounded-full bg-[#01173B] text-white nexgen-label text-xs font-black flex items-center justify-center border-2 border-[#01173B]">
-                    {history.length - idx}
-                  </span>
-                  <div>
-                    <h4 className="nexgen-label text-sm text-[#01173B]">{h.name}</h4>
-                    <span className="text-[11px] text-[#0A568C] font-medium">
-                      {new Date(h.timestamp).toLocaleTimeString()}
+            history.map((h, idx) => {
+              const prize = getPrize(h.prizeId);
+              return (
+                <div
+                  key={h.id}
+                  className="flex items-center justify-between p-3 brand-card brand-card--sm gap-2"
+                >
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <span className="w-7 h-7 rounded-full bg-[#01173B] text-white nexgen-label text-xs font-black flex items-center justify-center border-2 border-[#01173B] shrink-0">
+                      {history.length - idx}
                     </span>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="nexgen-label text-sm text-[#01173B] truncate">{h.name}</h4>
+                      <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
+                        <span className="text-[11px] text-[#0A568C] font-medium">
+                          {new Date(h.timestamp).toLocaleTimeString()}
+                        </span>
+                        {prize ? (
+                          <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-white text-[10px] font-black bg-gradient-to-r ${prize.badgeColor} border border-white shadow`}>{prize.placeLabel}</span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white border border-[#01173B]/10 text-[10px] font-black text-[#01173B]/60"><Award className="w-3 h-3" /> NO PRIZE</span>
+                        )}
+                      </div>
+                      {prize && (
+                        <div className="text-[10px] text-[#01173B]/60 truncate mt-0.5">{prize.title} • {prize.value}</div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {prize && (
+                      <div className="w-10 h-10 rounded-lg border border-[#01173B]/10 bg-white flex items-center justify-center overflow-hidden p-1 hidden sm:flex">
+                        <PrizeSVG prizeId={prize.id} className="w-full h-full" />
+                      </div>
+                    )}
+                    <button
+                      onClick={() => {
+                        sound.playButtonClick();
+                        onRestoreWinner(h);
+                      }}
+                      className="px-3 py-1.5 rounded-full bg-white hover:bg-[#f0f4f8] text-[#0A568C] text-[11px] font-black border-2 border-[#01173B] flex items-center gap-1 nexgen-label"
+                      title="Put back in the claw machine pool"
+                    >
+                      <RotateCcw className="w-3 h-3 brand-icon" />
+                      <span>RE-ADD</span>
+                    </button>
                   </div>
                 </div>
-
-                <button
-                  onClick={() => {
-                    sound.playButtonClick();
-                    onRestoreWinner(h);
-                  }}
-                  className="px-3 py-1.5 rounded-full bg-white hover:bg-[#f0f4f8] text-[#0A568C] text-[11px] font-black border-2 border-[#01173B] flex items-center gap-1 nexgen-label"
-                  title="Put back in the claw machine pool"
-                >
-                  <RotateCcw className="w-3 h-3 brand-icon" />
-                  <span>RE-ADD</span>
-                </button>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
