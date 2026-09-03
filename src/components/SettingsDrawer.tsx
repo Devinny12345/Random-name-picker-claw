@@ -238,47 +238,65 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             </div>
           </div>
 
-          {/* Toggles */}
-          <div className="rounded-2xl bg-white border-[3px] border-[#01173B] p-4 shadow-[0_4px_16px_rgba(1,23,59,0.12)] space-y-3">
-            <label className="text-[11px] font-black tracking-widest text-[#01173B] uppercase">Game Rules</label>
+           {/* Toggles */}
+           <div className="rounded-2xl bg-white border-[3px] border-[#01173B] p-4 shadow-[0_4px_16px_rgba(1,23,59,0.12)] space-y-3">
+             <label className="text-[11px] font-black tracking-widest text-[#01173B] uppercase">Game Rules</label>
+ 
+             <button
+               onClick={() => { sound.playButtonClick(); onUpdateSettings({ hideNames: !settings.hideNames }); }}
+               className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-all ${settings.hideNames ? 'bg-[#01173B] border-[#01173B] text-white' : 'bg-[#f0f4f8] border-[#01173B]/10 text-[#01173B]'}`}
+             >
+               <span className="flex items-center gap-2.5 font-bold text-xs">
+                 {settings.hideNames ? <EyeOff className="w-4 h-4 text-[#8CB23E]" /> : <Eye className="w-4 h-4 text-[#0A568C]" />}
+                 Mystery Capsules
+               </span>
+               <span className={`text-[11px] font-black px-2.5 py-1 rounded-full border ${settings.hideNames ? 'bg-[#8CB23E] text-[#01173B] border-white/15' : 'bg-white text-[#01173B]/60 border-[#01173B]/10'}`}>
+                 {settings.hideNames ? 'HIDDEN ?' : 'VISIBLE'}
+               </span>
+             </button>
+ 
+             <button
+               onClick={() => { sound.playButtonClick(); onUpdateSettings({ removeOnPick: !settings.removeOnPick }); }}
+               className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-all ${settings.removeOnPick ? 'bg-[#01173B] border-[#01173B] text-white' : 'bg-[#f0f4f8] border-[#01173B]/10 text-[#01173B]'}`}
+             >
+               <span className="flex items-center gap-2.5 font-bold text-xs">
+                 {settings.removeOnPick ? <CheckSquare className="w-4 h-4 text-[#009CFF]" /> : <Square className="w-4 h-4 text-[#01173B]/40" />}
+                 Remove winner after draw
+               </span>
+               <span className={`w-11 h-6 rounded-full p-0.5 flex items-center transition-all ${settings.removeOnPick ? 'bg-[#8CB23E] justify-end' : 'bg-[#01173B]/15 justify-start'}`}>
+                 <span className="w-5 h-5 rounded-full bg-white shadow block" />
+               </span>
+             </button>
+ 
+             <button
+               onClick={() => { sound.playButtonClick(); onUpdateSettings({ manualControl: !settings.manualControl }); }}
+               className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-all ${settings.manualControl ? 'bg-[#0A568C] border-[#0A568C] text-white' : 'bg-[#f0f4f8] border-[#01173B]/10 text-[#01173B]'}`}
+             >
+               <span className="font-bold text-xs">Manual joystick control</span>
+               <span className={`text-[11px] font-black px-2 py-1 rounded-full ${settings.manualControl ? 'bg-white text-[#0A568C]' : 'bg-[#01173B]/10 text-[#01173B]/60'}`}>{settings.manualControl ? 'ON' : 'AUTO'}</span>
+             </button>
+           </div>
+ 
+           {/* Test Data Reset */}
+           <div className="rounded-2xl bg-amber-50 border-[3px] border-amber-200 p-4 shadow-sm">
+             <label className="text-[11px] font-black tracking-widest text-amber-800 uppercase">Developer Tool</label>
+             <button
+               onClick={() => {
+                 sound.playButtonClick();
+                 // We'll trigger this via a custom event or handle it in App.tsx
+                 // For now, I'll use a window dispatch to let App.tsx handle the async call
+                 window.dispatchEvent(new CustomEvent('reset-test-names'));
+               }}
+               className="mt-2 w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs border-2 border-amber-600 shadow transition-all active:scale-95"
+             >
+               RESET TO 10 TEST NAMES
+             </button>
+             <p className="mt-2 text-[10px] text-amber-700/70">Clears cloud list and injects 10 test entries for verification.</p>
+           </div>
+ 
+           {/* Sound */}
+           <div className="rounded-2xl bg-white border-[3px] border-[#01173B] p-4 shadow-[0_4px_16px_rgba(1,23,59,0.12)]">
 
-            <button
-              onClick={() => { sound.playButtonClick(); onUpdateSettings({ hideNames: !settings.hideNames }); }}
-              className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-all ${settings.hideNames ? 'bg-[#01173B] border-[#01173B] text-white' : 'bg-[#f0f4f8] border-[#01173B]/10 text-[#01173B]'}`}
-            >
-              <span className="flex items-center gap-2.5 font-bold text-xs">
-                {settings.hideNames ? <EyeOff className="w-4 h-4 text-[#8CB23E]" /> : <Eye className="w-4 h-4 text-[#0A568C]" />}
-                Mystery Capsules
-              </span>
-              <span className={`text-[11px] font-black px-2.5 py-1 rounded-full border ${settings.hideNames ? 'bg-[#8CB23E] text-[#01173B] border-white/15' : 'bg-white text-[#01173B]/60 border-[#01173B]/10'}`}>
-                {settings.hideNames ? 'HIDDEN ?' : 'VISIBLE'}
-              </span>
-            </button>
-
-            <button
-              onClick={() => { sound.playButtonClick(); onUpdateSettings({ removeOnPick: !settings.removeOnPick }); }}
-              className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-all ${settings.removeOnPick ? 'bg-[#01173B] border-[#01173B] text-white' : 'bg-[#f0f4f8] border-[#01173B]/10 text-[#01173B]'}`}
-            >
-              <span className="flex items-center gap-2.5 font-bold text-xs">
-                {settings.removeOnPick ? <CheckSquare className="w-4 h-4 text-[#009CFF]" /> : <Square className="w-4 h-4 text-[#01173B]/40" />}
-                Remove winner after draw
-              </span>
-              <span className={`w-11 h-6 rounded-full p-0.5 flex items-center transition-all ${settings.removeOnPick ? 'bg-[#8CB23E] justify-end' : 'bg-[#01173B]/15 justify-start'}`}>
-                <span className="w-5 h-5 rounded-full bg-white shadow block" />
-              </span>
-            </button>
-
-            <button
-              onClick={() => { sound.playButtonClick(); onUpdateSettings({ manualControl: !settings.manualControl }); }}
-              className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-all ${settings.manualControl ? 'bg-[#0A568C] border-[#0A568C] text-white' : 'bg-[#f0f4f8] border-[#01173B]/10 text-[#01173B]'}`}
-            >
-              <span className="font-bold text-xs">Manual joystick control</span>
-              <span className={`text-[11px] font-black px-2 py-1 rounded-full ${settings.manualControl ? 'bg-white text-[#0A568C]' : 'bg-[#01173B]/10 text-[#01173B]/60'}`}>{settings.manualControl ? 'ON' : 'AUTO'}</span>
-            </button>
-          </div>
-
-          {/* Sound */}
-          <div className="rounded-2xl bg-white border-[3px] border-[#01173B] p-4 shadow-[0_4px_16px_rgba(1,23,59,0.12)]">
             <div className="flex items-center justify-between">
               <label className="text-[11px] font-black tracking-widest text-[#01173B] uppercase flex items-center gap-2">
                 {settings.soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-[#8CB23E]" /> : <VolumeX className="w-3.5 h-3.5 text-[#01173B]/40" />}

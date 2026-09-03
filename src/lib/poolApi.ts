@@ -98,6 +98,13 @@ export async function savePrizes(
   });
 }
 
+export async function resetToTestNames(listId: string, passcode: string) {
+  await convex.mutation(api.listsMutations.resetToTestNames, {
+    listId: listId as any,
+    passcode,
+  });
+}
+
 export async function changePasscode(oldPasscode: string, newPasscode: string) {
   return await convex.mutation(api.auth.change, { oldPasscode, newPasscode });
 }

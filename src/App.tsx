@@ -13,7 +13,7 @@ import { SettingsDrawer } from './components/SettingsDrawer';
 import { PrizeSelector } from './components/PrizeSelector';
 import { PrizeReviewModal } from './components/PrizeReviewModal';
 import { sound } from './utils/audio';
-import { fetchLists, fetchListByCode, initDefaultList, saveNames, saveHistory, createList, renameList, deleteList, verifyPasscode, savePrizes } from './lib/poolApi';
+import { fetchLists, fetchListByCode, initDefaultList, saveNames, saveHistory, createList, renameList, deleteList, verifyPasscode, savePrizes, resetToTestNames } from './lib/poolApi';
 import type { ListSummary, LoadedList } from './lib/convexClient';
 
 // Debounce helper for expensive side-effects
@@ -513,6 +513,24 @@ export default function App() {
 
   // Effective display title — fall back to required brand title
   const displayTitle = (settings.classroomTitle && settings.classroomTitle.trim()) || 'NEXGEN BACK TO SCHOOL RAFFLE';
+
+  useEffect(() => {
+    const handleReset = async () => {
+      if (currentList && passcode) {
+        try {
+          await resetToTestNames(currentList._id, passcode);
+          const data = await fetchListByCode(currentList.listCode);
+          if (data) {
+            setItems(data.names.map((n) => ({ id: n.id, name: n.name, colorIndex: n.colorIndex })));
+          }
+        } catch (e) {
+          console.error("Failed to reset test names:", e);
+        }
+      }
+    };
+    window.addEventListener('reset-test-names', handleReset);
+    return () => window.removeEventListener('reset-test-names', handleReset);
+  }, [currentList, passcode]);
 
   return (
     <div className="relative w-screen h-screen chalkboard-bg--navy text-white flex flex-col overflow-hidden">

@@ -99,3 +99,29 @@ export const savePrizes = mutation({
   },
 });
 
+// Force reset list to test names. Passcode required.
+export const resetToTestNames = mutation({
+  args: { listId: v.id("lists"), passcode: v.string() },
+  handler: async (ctx, { listId, passcode }) => {
+    const doc = await ensureAppDoc(ctx);
+    if (!(await checkPasscode(doc, passcode))) throw new Error("unauthorized: invalid passcode");
+    
+    const existing = await ctx.db.query("names").withIndex("by_list", (q) => q.eq("listId", listId)).collect();
+    await Promise.all(existing.map((n) => ctx.db.delete(n._id)));
+
+    const testNames = [
+      "TEST USER 1", "TEST USER 2", "TEST USER 3", "TEST USER 4", "TEST USER 5",
+      "TEST USER 6", "TEST USER 7", "TEST USER 8", "TEST USER 9", "TEST USER 10"
+    ];
+
+    for (let i = 0; i < testNames.length; i++) {
+      await ctx.db.insert("names", {
+        listId,
+        name: testNames[i],
+        colorIndex: i % 8,
+        position: i,
+      });
+    }
+  },
+});
+
