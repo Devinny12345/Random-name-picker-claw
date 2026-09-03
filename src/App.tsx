@@ -92,6 +92,7 @@ export default function App() {
           manualControl: false,
           hideNames: true,
           binCount: 40,
+          prizes: parsed.prizes || PRIZES, // Ensure prizes are loaded from storage
           ...parsed,
           classroomTitle: parsed.classroomTitle === 'Classroom Student Picker' ? 'NEXGEN BACK TO SCHOOL RAFFLE' : (parsed.classroomTitle || 'NEXGEN BACK TO SCHOOL RAFFLE'),
         };
@@ -107,6 +108,7 @@ export default function App() {
       hideNames: true,
       classroomTitle: 'NEXGEN BACK TO SCHOOL RAFFLE',
       binCount: 40,
+      prizes: PRIZES,
     };
   });
 
