@@ -133,14 +133,13 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
     if (confirm('WIPE EVERYTHING? This will permanently delete all names and draw history from the cloud for this list.')) {
       if (currentList) {
         try {
-          // Use nexgen2026 as the definitive admin password for cloud wipe
+          // use nexgen2026 directly to ensure authorized wipe
           await onClearCloudData(currentList._id, 'nexgen2026');
           onUpdateItems([]);
           setAuthMsg('Cloud pool wiped successfully.');
         } catch (e) {
           console.error('Cloud wipe failed:', e);
-          alert('Failed to clear cloud data. Server rejected the request.');
-          // Fallback: still clear local state so user sees progress
+          alert('Cloud wipe failed. Clearing local list only.');
           onUpdateItems([]);
         }
       } else {
