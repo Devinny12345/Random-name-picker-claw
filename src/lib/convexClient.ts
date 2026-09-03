@@ -6,7 +6,7 @@ import { api } from "../../convex/_generated/api";
 // Override in Vercel dashboard → Settings → Environment Variables → VITE_CONVEX_URL
 export const convexUrl: string =
   (import.meta.env.VITE_CONVEX_URL as string | undefined) ||
-  "https://bright-mink-448.convex.cloud";
+  "https://quixotic-ant-66.convex.cloud";
 
 export const convex = new ConvexClient(convexUrl);
 
