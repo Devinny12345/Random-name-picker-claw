@@ -75,6 +75,21 @@ export const remove = mutation({
   },
 });
 
+// Completely wipe all names and history for a list. Passcode required.
+export const clearAllCloudData = mutation({
+  args: { listId: v.id("lists"), passcode: v.string() },
+  handler: async (ctx, { listId, passcode }) => {
+    const doc = await ensureAppDoc(ctx);
+    if (!(await checkPasscode(doc, passcode))) throw new Error("unauthorized: invalid passcode");
+    
+    const names = await ctx.db.query("names").withIndex("by_list", (q) => q.eq("listId", listId)).collect();
+    await Promise.all(names.map((n) => ctx.db.delete(n._id)));
+    
+    const history = await ctx.db.query("history").withIndex("by_list", (q) => q.eq("listId", listId)).collect();
+    await Promise.all(history.map((h) => ctx.db.delete(h._id)));
+  },
+});
+
 // Rename a list. Passcode required.
 export const rename = mutation({
   args: { listId: v.id("lists"), name: v.string(), passcode: v.string() },

@@ -105,6 +105,13 @@ export async function resetToTestNames(listId: string, passcode: string) {
   });
 }
 
+export async function clearAllCloudData(listId: string, passcode: string) {
+  await convex.mutation(api.listsMutations.clearAllCloudData, {
+    listId: listId as any,
+    passcode,
+  });
+}
+
 export async function changePasscode(oldPasscode: string, newPasscode: string) {
   return await convex.mutation(api.auth.change, { oldPasscode, newPasscode });
 }

@@ -38,6 +38,7 @@ interface NamesPoolPanelProps {
   onCreateList: (name: string) => Promise<string>;
   onDeleteList: (listId: string) => Promise<void>;
   onRenameList: (listId: string, name: string) => Promise<void>;
+  onClearCloudData: (listId: string, passcode: string) => Promise<void>;
 }
 
 export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
@@ -127,10 +128,20 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
     onUpdateItems(defaultItems);
   };
 
-  const handleClearPool = () => {
+  const handleClearPool = async () => {
     sound.playButtonClick();
-    if (confirm('Clear all student names from the classroom claw machine?')) {
-      onUpdateItems([]);
+    if (confirm('WIPE EVERYTHING? This will permanently delete all names and draw history from the cloud for this list.')) {
+      if (isUnlocked && currentList) {
+        try {
+          // Call the new cloud wipe function
+          await onClearCloudData(currentList._id, passcodeInput); // This will be passed via props
+          onUpdateItems([]);
+        } catch (e) {
+          alert('Failed to clear cloud data. Please check your passcode.');
+        }
+      } else {
+        onUpdateItems([]);
+      }
     }
   };
 
