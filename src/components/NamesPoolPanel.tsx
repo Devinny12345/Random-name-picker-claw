@@ -159,12 +159,14 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
   const [limit, setLimit] = useState(80);
 
   const filteredItems = useMemo(() => {
+    if (!items) return [];
     return items.filter((item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase().trim())
+      item?.name?.toLowerCase().includes(searchQuery?.toLowerCase().trim() || '')
     );
   }, [items, searchQuery]);
 
   const displayedItems = useMemo(() => {
+    if (!filteredItems) return [];
     return filteredItems.slice(0, limit);
   }, [filteredItems, limit]);
 
@@ -277,50 +279,51 @@ export const NamesPoolPanel: React.FC<NamesPoolPanelProps> = ({
           {authMsg && <p className="mt-2 text-[11px] font-bold text-[#8CB23E]">{authMsg}</p>}
 
           {/* List switcher — dark cards */}
-          {isCloudReady && !cloudError && lists.length > 0 && (
-            <div className="mt-3 space-y-1.5">
-              {lists.map((l) => {
-                const active = currentList?._id === l._id;
-                return (
-                  <div
-                    key={l._id}
-                    className={`flex items-center justify-between gap-2 rounded-xl border-2 px-3 py-2 transition-colors ${
-                      active ? 'bg-[#0A568C] text-white border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)]' : 'bg-white/10 text-white border-white/15 hover:bg-white/15 hover:border-white/25'
-                    }`}
-                  >
-                    <button
-                      onClick={() => { if (!active) onSelectList(l.listCode); }}
-                      className="flex items-center gap-2 min-w-0 flex-1 text-left"
-                    >
-                      <span className={`w-2 h-2 rounded-full shrink-0 ${active ? 'bg-[#8CB23E]' : 'bg-[#8CB23E]'}`} />
-                      <span className="text-xs font-black truncate nexgen-label">{l.name}</span>
-                      <span className={`text-[10px] font-bold ${active ? 'text-white/80' : 'text-white/60'}`}>{l.count}</span>
-                    </button>
-                    {active && (
-                      <div className="flex items-center gap-1 shrink-0">
-                        <button
-                          onClick={() => { const n = prompt('Rename list', l.name); if (n) onRenameList(l._id, n); }}
-                          className="p-1 rounded text-white/80 hover:bg-white/20"
-                          title="Rename"
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                        </button>
-                        {l.listCode !== 'RAFFLE' && (
-                          <button
-                            onClick={() => { if (confirm(`Delete list “${l.name}”?`)) onDeleteList(l._id); }}
-                            className="p-1 rounded text-white/80 hover:bg-white/20"
-                            title="Delete"
-                          >
-                            <TrashIcon className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+           {isCloudReady && !cloudError && lists && lists.length > 0 && (
+             <div className="mt-3 space-y-1.5">
+               {lists.map((l) => {
+                 if (!l) return null;
+                 const active = currentList?._id === l._id;
+                 return (
+                   <div
+                     key={l._id}
+                     className={`flex items-center justify-between gap-2 rounded-xl border-2 px-3 py-2 transition-colors ${
+                       active ? 'bg-[#0A568C] text-white border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)]' : 'bg-white/10 text-white border-white/15 hover:bg-white/15 hover:border-white/25'
+                     }`}
+                   >
+                     <button
+                       onClick={() => { if (!active && l.listCode) onSelectList(l.listCode); }}
+                       className="flex items-center gap-2 min-w-0 flex-1 text-left"
+                     >
+                       <span className={`w-2 h-2 rounded-full shrink-0 ${active ? 'bg-[#8CB23E]' : 'bg-[#8CB23E]'}`} />
+                       <span className="text-xs font-black truncate nexgen-label">{l.name || 'Unnamed List'}</span>
+                       <span className={`text-[10px] font-bold ${active ? 'text-white/80' : 'text-white/60'}`}>{l.count ?? 0}</span>
+                     </button>
+                     {active && (
+                       <div className="flex items-center gap-1 shrink-0">
+                         <button
+                           onClick={() => { const n = prompt('Rename list', l.name); if (n) onRenameList(l._id, n); }}
+                           className="p-1 rounded text-white/80 hover:bg-white/20"
+                           title="Rename"
+                         >
+                           <Pencil className="w-3.5 h-3.5" />
+                         </button>
+                         {l.listCode !== 'RAFFLE' && (
+                           <button
+                             onClick={() => { if (confirm(`Delete list “${l.name}”?`)) onDeleteList(l._id); }}
+                             className="p-1 rounded text-white/80 hover:bg-white/20"
+                             title="Delete"
+                           >
+                             <TrashIcon className="w-3.5 h-3.5" />
+                           </button>
+                         )}
+                       </div>
+                     )}
+                   </div>
+                 );
+               })}
+             </div>
+           )}
 
           {/* Create new list — dark */}
           {isCloudReady && !cloudError && (
