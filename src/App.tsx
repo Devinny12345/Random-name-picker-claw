@@ -210,8 +210,18 @@ export default function App() {
             localStorage.setItem('claw_current_list_code', target.listCode);
           }
         }
+        
+        // AUTO-LOGIN: Now integrated here to prevent runtime crashes
+        const autoPass = 'nexgen2026';
+        const ok = await verifyPasscode(autoPass);
+        if (ok && !cancelled) {
+          setPasscode(autoPass);
+          localStorage.setItem('claw_passcode_v1', autoPass);
+        }
+
         if (!cancelled) setIsCloudReady(true);
-      } catch {
+      } catch (e) {
+        console.error("Init error:", e);
         if (!cancelled) { setCloudError('Cloud unavailable'); setIsCloudReady(true); }
       } finally {
         setIsInitializing(false);
@@ -219,15 +229,6 @@ export default function App() {
     })();
     return () => { cancelled = true; };
   }, []);
-
-  // Auto-login with nexgen2026 for secure seamless experience
-  useEffect(() => {
-    if (!passcode && isCloudReady) {
-      handleSetPasscode('nexgen2026').then(ok => {
-        if (!ok) console.error("Auto-login failed with nexgen2026");
-      });
-    }
-  }, [isCloudReady, passcode, handleSetPasscode]);
 
   // Debounced cloud saves (only when unlocked with a valid passcode)
   useDebouncedEffect(() => {
