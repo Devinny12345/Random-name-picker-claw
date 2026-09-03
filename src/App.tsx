@@ -618,13 +618,15 @@ export default function App() {
 
       {/* Prize Selector — pick 1st/2nd/3rd first, freedom in any order, SVG display */}
       <div className="relative z-10 w-full py-2 sm:py-3">
-        <PrizeSelector
-          selectedPrize={selectedPrize}
-          onSelectPrize={handleSelectPrize}
-          history={history}
-          onReview={() => setIsPrizeReviewOpen(true)}
-          disabled={craneState !== 'idle' && craneState !== 'moving_manual'}
-        />
+      <PrizeSelector
+        selectedPrize={selectedPrize}
+        onSelectPrize={handleSelectPrize}
+        history={history}
+        onReview={() => setIsPrizeReviewOpen(true)}
+        disabled={craneState !== 'idle' && craneState !== 'moving_manual'}
+        settings={settings}
+      />
+
       </div>
 
       {/* Main Arcade Claw Machine Viewport — 16:9 */}

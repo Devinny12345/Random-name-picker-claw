@@ -2,7 +2,7 @@ import React from 'react';
 import { Trophy, CheckCircle2, Eye } from 'lucide-react';
 import { PRIZES, getPrize, type Prize } from '../data/prizes';
 import { PrizeSVG } from './PrizeSVGs';
-import type { PrizeId, WinnerHistoryItem } from '../types';
+import type { PrizeId, WinnerHistoryItem, GameSettings } from '../types';
 
 interface PrizeSelectorProps {
   selectedPrize: PrizeId | null;
@@ -10,6 +10,7 @@ interface PrizeSelectorProps {
   history: WinnerHistoryItem[];
   onReview: () => void;
   disabled?: boolean;
+  settings?: GameSettings; // Added settings to allow live prize updates
 }
 
 export const PrizeSelector: React.FC<PrizeSelectorProps> = ({
@@ -18,10 +19,20 @@ export const PrizeSelector: React.FC<PrizeSelectorProps> = ({
   history,
   onReview,
   disabled,
+  settings,
 }) => {
   const winnerFor = (id: PrizeId) => history.find((h) => h.prizeId === id) ?? null;
 
-  const allDrawn = PRIZES.every((p) => winnerFor(p.id as PrizeId));
+  // Merge hardcoded PRIZES with custom settings prizes
+  const mergedPrizes = PRIZES.map((p) => {
+    const id = p.id as PrizeId;
+    const custom = settings?.prizes?.[id];
+    return custom 
+      ? { ...p, title: custom.title, value: custom.value, longDescription: custom.longDescription }
+      : p;
+  });
+
+  const allDrawn = mergedPrizes.every((p) => winnerFor(p.id as PrizeId));
 
   return (
     <div className="w-full max-w-[1500px] mx-auto px-3 sm:px-4">
@@ -41,7 +52,7 @@ export const PrizeSelector: React.FC<PrizeSelectorProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-3">
-        {PRIZES.map((prize) => {
+        {mergedPrizes.map((prize) => {
           const winner = winnerFor(prize.id as PrizeId);
           const isSelected = selectedPrize === prize.id;
           const isWon = !!winner;
