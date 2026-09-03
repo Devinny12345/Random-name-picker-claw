@@ -217,16 +217,6 @@ export default function App() {
         setIsInitializing(false);
       }
     })();
-
-            localStorage.setItem('claw_current_list_code', target.listCode);
-          }
-        }
-
-        if (!cancelled) setIsCloudReady(true);
-      } catch {
-        if (!cancelled) { setCloudError('Cloud unavailable'); setIsCloudReady(true); }
-      }
-    })();
     return () => { cancelled = true; };
   }, []);
 
