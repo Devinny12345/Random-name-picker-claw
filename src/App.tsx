@@ -13,7 +13,7 @@ import { SettingsDrawer } from './components/SettingsDrawer';
 import { PrizeSelector } from './components/PrizeSelector';
 import { PrizeReviewModal } from './components/PrizeReviewModal';
 import { sound } from './utils/audio';
-import { fetchLists, fetchListByCode, initDefaultList, saveNames, saveHstory, createList, renameList, deleteList, verifyPasscode, savePrizes, resetToTestNames, clearAllCloudData } from './lib/poolApi';
+import { fetchLists, fetchListByCode, initDefaultList, saveNames, saveHistory, createList, renameList, deleteList, verifyPasscode, savePrizes, resetToTestNames, clearAllCloudData } from './lib/poolApi';
 import type { ListSummary, LoadedList } from './lib/convexClient';
 
 // Debounce helper for expensive side-effects
