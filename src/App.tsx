@@ -13,7 +13,7 @@ import { SettingsDrawer } from './components/SettingsDrawer';
 import { PrizeSelector } from './components/PrizeSelector';
 import { PrizeReviewModal } from './components/PrizeReviewModal';
 import { sound } from './utils/audio';
-import { fetchLists, fetchListByCode, initDefaultList, saveNames, saveHistory, createList, renameList, deleteList, verifyPasscode } from './lib/poolApi';
+import { fetchLists, fetchListByCode, initDefaultList, saveNames, saveHistory, createList, renameList, deleteList, verifyPasscode, savePrizes } from './lib/poolApi';
 import type { ListSummary, LoadedList } from './lib/convexClient';
 
 // Debounce helper for expensive side-effects
@@ -205,9 +205,13 @@ export default function App() {
             setHistory(data.history.map((h) => ({
               id: h.id, name: h.name, colorIndex: h.colorIndex, theme: h.theme as CapsuleTheme, timestamp: new Date(h.createdAt), prizeId: (h as any).prizeId as PrizeId | null ?? null, prizeLabel: (h as any).prizeLabel ?? null,
             })));
+            if (data.prizes) {
+              setSettings((s) => ({ ...s, prizes: data.prizes }));
+            }
             localStorage.setItem('claw_current_list_code', target.listCode);
           }
         }
+
         if (!cancelled) setIsCloudReady(true);
       } catch {
         if (!cancelled) { setCloudError('Cloud unavailable'); setIsCloudReady(true); }
@@ -629,7 +633,12 @@ export default function App() {
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
         settings={settings}
-        onUpdateSettings={(patch) => setSettings((s) => ({ ...s, ...patch }))}
+        onUpdateSettings={(patch) => {
+          setSettings((s) => ({ ...s, ...patch }));
+          if (patch.prizes && currentList && passcode) {
+            savePrizes(currentList._id, patch.prizes, passcode).catch(console.error);
+          }
+        }}
         onOpenPool={() => { setIsSettingsOpen(false); setTimeout(() => setIsPoolOpen(true), 180); }}
         onOpenHistory={() => { setIsSettingsOpen(false); setTimeout(() => setIsHistoryOpen(true), 180); }}
         historyCount={history.length}

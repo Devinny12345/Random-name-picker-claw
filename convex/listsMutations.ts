@@ -84,3 +84,18 @@ export const rename = mutation({
     await ctx.db.patch(listId, { name: name.trim() || "LIST" });
   },
 });
+
+// Save custom prizes for a list. Passcode required.
+export const savePrizes = mutation({
+  args: {
+    listId: v.id("lists"),
+    passcode: v.string(),
+    prizes: v.any(),
+  },
+  handler: async (ctx, { listId, passcode, prizes }) => {
+    const doc = await ensureAppDoc(ctx);
+    if (!(await checkPasscode(doc, passcode))) throw new Error("unauthorized: invalid passcode");
+    await ctx.db.patch(listId, { prizes });
+  },
+});
+

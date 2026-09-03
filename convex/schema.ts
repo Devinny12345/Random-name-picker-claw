@@ -13,9 +13,11 @@ export default defineSchema({
     name: v.string(),      // display name, e.g. "Homeroom 4B"
     listCode: v.string(),  // short stable share code
     createdAt: v.number(),
+    prizes: v.optional(v.any()), // Store custom prize configs here: { '1st': {title, value, longDescription}, ... }
   })
     .index("by_listCode", ["listCode"])
     .index("by_createdAt", ["createdAt"]),
+
 
   // The pool entries belonging to a list
   names: defineTable({

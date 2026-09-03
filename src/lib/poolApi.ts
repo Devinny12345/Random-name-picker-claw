@@ -86,6 +86,18 @@ export async function saveHistory(
   }
 }
 
+export async function savePrizes(
+  listId: string,
+  prizes: any,
+  passcode: string
+) {
+  await convex.mutation(api.listsMutations.savePrizes, {
+    listId: listId as any,
+    passcode,
+    prizes,
+  });
+}
+
 export async function changePasscode(oldPasscode: string, newPasscode: string) {
   return await convex.mutation(api.auth.change, { oldPasscode, newPasscode });
 }
