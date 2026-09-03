@@ -95,7 +95,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
             {(['1st', '2nd', '3rd'] as const).map((id) => (
               <div key={id} className="rounded-2xl bg-white border-[3px] border-[#01173B] p-4 shadow-[0_4px_16px_rgba(1,23,59,0.12)] space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className={`text-[11px] font-black px-2 py-0.5 rounded-full text-white ${id === '1st' ? 'bg-amber-500' : id === '2nd' ? 'bg-slate-400' : 'bg-orange-600'}`}>
+                  <span className={`text-[11px] font-black px-2 py-0.5 rounded-full text-white ${id === '1st' ? 'bg-amber-500' : id === '2nd' ? 'bg-slate-400' : 'bg-orange-600'} shadow-sm`}>
                     {id.toUpperCase()} PLACE
                   </span>
                 </div>
