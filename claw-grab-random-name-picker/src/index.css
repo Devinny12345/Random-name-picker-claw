@@ -197,5 +197,16 @@ html, body {
     border-radius: 9999px;
     box-shadow: 0 1px 6px rgba(140,178,62,0.5);
   }
+
+  /* Fixed 16:9 stage — scales to fit the window while preserving the ratio.
+     Black/letterbox is filled by the surrounding body background. */
+  .stage-16x9 {
+    width: min(100vw, calc(100vh * 16 / 9));
+    aspect-ratio: 16 / 9;
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: 0 auto;
+    position: relative;
+  }
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Trophy, CheckCircle2, Eye } from 'lucide-react';
 import { PRIZES, getPrize, type Prize } from '../data/prizes';
-import { PrizeSVG } from './PrizeSVGs';
+import { PrizeImage } from './PrizeSVGs';
 import type { PrizeId, WinnerHistoryItem } from '../types';
 
 interface PrizeSelectorProps {
@@ -61,7 +61,7 @@ export const PrizeSelector: React.FC<PrizeSelectorProps> = ({
               <div className="p-3 sm:p-3.5 flex gap-3">
                 {/* SVG */}
                 <div className={`w-[92px] h-[84px] sm:w-[104px] sm:h-[96px] rounded-xl border-2 ${isSelected ? 'border-[#009CFF] bg-[#f0f9ff]' : 'border-[#01173B]/10 bg-[#f7f8f9]'} flex items-center justify-center shrink-0 overflow-hidden p-1`}>
-                  <PrizeSVG prizeId={prize.id} className="w-full h-full" />
+                  <PrizeImage prizeId={prize.id} className="w-full h-full" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">

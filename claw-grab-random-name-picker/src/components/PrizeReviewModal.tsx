@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, Trophy, RotateCcw, Award } from 'lucide-react';
 import { PRIZES, getPrize } from '../data/prizes';
-import { PrizeSVG } from './PrizeSVGs';
+import { PrizeImage } from './PrizeSVGs';
 import type { WinnerHistoryItem } from '../types';
 import { sound } from '../utils/audio';
 
@@ -48,7 +48,7 @@ export const PrizeReviewModal: React.FC<PrizeReviewModalProps> = ({ isOpen, onCl
                 <div className={`h-1.5 w-full bg-gradient-to-r ${prize.badgeColor}`} />
                 <div className="p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                   <div className="w-[112px] h-[96px] rounded-xl border-2 border-[#01173B]/10 bg-[#f7f8f9] flex items-center justify-center shrink-0 p-1">
-                    <PrizeSVG prizeId={prize.id} className="w-full h-full" />
+<PrizeImage prizeId={prize.id} className="w-full h-full" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -119,7 +119,7 @@ export const PrizeReviewModal: React.FC<PrizeReviewModalProps> = ({ isOpen, onCl
                         </div>
                       </div>
                       <div className="shrink-0 ml-2 w-12 h-12 rounded-lg border border-[#01173B]/10 bg-white flex items-center justify-center overflow-hidden p-1">
-                        {prize ? <PrizeSVG prizeId={prize.id} className="w-full h-full" /> : <Award className="w-5 h-5 text-[#01173B]/40" />}
+                        {prize ? <PrizeImage prizeId={prize.id} className="w-full h-full" /> : <Award className="w-5 h-5 text-[#01173B]/40" />}
                       </div>
                     </div>
                   );

@@ -12,9 +12,18 @@ export interface Prize {
   ringColor: string;
   accent: string;
   order: number; // 1 for 1st, 3 for 3rd - for sorting 3->1
+  imageUrl?: string; // optional photo, overrides SVG icon when set
 }
 
-export const PRIZES: Prize[] = [
+export interface PrizeEdits {
+  title?: string;
+  value?: string;
+  description?: string;
+  longDescription?: string;
+  imageUrl?: string;
+}
+
+const DEFAULT_PRIZES: Prize[] = [
   {
     id: '1st',
     placeLabel: '1ST PLACE',
@@ -55,6 +64,8 @@ export const PRIZES: Prize[] = [
     order: 3,
   },
 ];
+
+export const PRIZES: Prize[] = DEFAULT_PRIZES.map((p) => ({ ...p }));
 
 export const PRIZE_MAP: Record<PrizeId, Prize> = {
   '1st': PRIZES[0],

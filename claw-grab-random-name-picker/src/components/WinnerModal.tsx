@@ -4,7 +4,7 @@ import { Sparkles, Trophy, Trash2, CheckCircle2, RotateCcw, Eye } from 'lucide-r
 import { NameItem, CapsuleTheme } from '../types';
 import { CAPSULE_PALETTES } from '../data/presets';
 import { Prize } from '../data/prizes';
-import { PrizeSVG } from './PrizeSVGs';
+import { PrizeImage } from './PrizeSVGs';
 import { sound } from '../utils/audio';
 
 interface WinnerModalProps {
@@ -69,7 +69,7 @@ export const WinnerModal: React.FC<WinnerModalProps> = ({
           {prize ? (
             <div className="relative mt-4 mb-2 w-full flex flex-col items-center">
               <div className={`w-[180px] h-[150px] rounded-2xl border-[3px] border-[#01173B] bg-white shadow-[0_8px_22px_rgba(1,23,59,0.25)] p-2`}>
-                <PrizeSVG prizeId={prize.id} className="w-full h-full" />
+                <PrizeImage prizeId={prize.id} className="w-full h-full" />
               </div>
               <div className="mt-3 flex items-center gap-2 flex-wrap justify-center">
                 <span className={`inline-flex px-3 py-1 rounded-full text-white text-xs font-black tracking-widest bg-gradient-to-r ${prize.badgeColor} border-2 border-white shadow`}>{prize.placeLabel}</span>

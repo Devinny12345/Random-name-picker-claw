@@ -1,4 +1,5 @@
 import React from 'react';
+import { getPrize } from '../data/prizes';
 
 // Brand palette: Midnight #01173B, Nexgen Navy #0A568C, Orbit Green #8CB23E, Cyan #009CFF
 
@@ -130,4 +131,13 @@ export const PrizeSVG: React.FC<{ prizeId: string; className?: string }> = ({ pr
   if (prizeId === '1st') return <Prize1stSVG className={className} />;
   if (prizeId === '2nd') return <Prize2ndSVG className={className} />;
   return <Prize3rdSVG className={className} />;
+};
+
+// Renders the actual prize photo when a URL is set for the prize, otherwise the illustration.
+export const PrizeImage: React.FC<{ prizeId: string; className?: string }> = ({ prizeId, className }) => {
+  const prize = getPrize(prizeId);
+  if (prize?.imageUrl) {
+    return <img src={prize.imageUrl} alt={prize.title} className={`${className} object-cover`} />;
+  }
+  return <PrizeSVG prizeId={prizeId} className={className} />;
 };
