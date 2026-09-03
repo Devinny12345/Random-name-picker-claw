@@ -2,11 +2,11 @@ import { ConvexClient } from "convex/browser";
 import { api } from "../../convex/_generated/api";
 
 // Single shared Convex client for the app.
-// Falls back to the preview deployment so Vercel builds work without manual env setup.
+// Falls back to the production deployment so Vercel builds work without manual env setup.
 // Override in Vercel dashboard → Settings → Environment Variables → VITE_CONVEX_URL
 export const convexUrl: string =
   (import.meta.env.VITE_CONVEX_URL as string | undefined) ||
-  "https://bright-mink-448.convex.cloud";
+  "https://quixotic-ant-66.convex.cloud";
 
 export const convex = new ConvexClient(convexUrl);
 

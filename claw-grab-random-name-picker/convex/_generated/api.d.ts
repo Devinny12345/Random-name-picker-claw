@@ -12,6 +12,7 @@ import type * as auth from "../auth.js";
 import type * as authHelpers from "../authHelpers.js";
 import type * as lists from "../lists.js";
 import type * as listsMutations from "../listsMutations.js";
+import type * as raffleNames from "../raffleNames.js";
 import type * as seed from "../seed.js";
 
 import type {
@@ -25,6 +26,7 @@ declare const fullApi: ApiFromModules<{
   authHelpers: typeof authHelpers;
   lists: typeof lists;
   listsMutations: typeof listsMutations;
+  raffleNames: typeof raffleNames;
   seed: typeof seed;
 }>;
 
